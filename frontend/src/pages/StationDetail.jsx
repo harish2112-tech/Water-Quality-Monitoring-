@@ -11,7 +11,6 @@ import {
     Wind,
     ShieldCheck,
     AlertCircle,
-    AlertTriangle,
     Activity,
     Droplets,
     Waves
@@ -20,7 +19,6 @@ import GlassCard from '../components/GlassCard';
 import StatusBadge from '../components/StatusBadge';
 import TrendChart from '../components/TrendChart';
 import ReadingCard from '../components/ReadingCard';
-import AlertTrigger from '../components/AlertTrigger';
 import { stationService } from '../services/stationService';
 import { readingService } from '../services/readingService';
 

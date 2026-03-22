@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Bell, 
-    AlertTriangle, 
     MapPin,
     ShieldAlert,
     Activity,
@@ -13,7 +12,6 @@ import {
 import { stationService } from '../services/stationService';
 
 const Alerts = () => {
-    const [stations, setStations] = useState([]);
     const [alerts, setAlerts] = useState([]);
     const [selectedAlert, setSelectedAlert] = useState(null);
 

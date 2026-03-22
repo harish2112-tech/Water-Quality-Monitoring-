@@ -4,7 +4,6 @@ import {
     Search,
     Filter,
     MoreVertical,
-    ExternalLink,
     Eye,
     Trash2
 } from 'lucide-react';

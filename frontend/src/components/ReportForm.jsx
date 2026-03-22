@@ -5,8 +5,7 @@ import {
     Check,
     Send,
     MapPin,
-    Crosshair,
-    Waves
+    Crosshair
 } from 'lucide-react';
 import GlassCard from './GlassCard';
 import MapSelectModal from './MapSelectModal';
