@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
@@ -24,16 +25,22 @@ const Placeholder = ({ name }) => (
   </div>
 );
 
-const AppLayout = ({ children }) => (
-  <div className="min-h-screen bg-ocean-deep text-white relative">
-    <MainBackground />
-    <Sidebar />
-    <Navbar />
-    <main className="pl-64 pt-16 h-screen overflow-y-auto scrollbar-custom relative z-10">
-      <div className="p-8">{children}</div>
-    </main>
-  </div>
-);
+const AppLayout = ({ children }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-ocean-deep text-white relative flex overflow-hidden">
+      <MainBackground />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 flex flex-col min-w-0 relative">
+        <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <main className="flex-1 pt-16 lg:pl-64 h-screen overflow-y-auto scrollbar-custom relative z-10 transition-all duration-300">
+          <div className="p-4 md:p-8 w-full max-w-[1600px] mx-auto">{children}</div>
+        </main>
+      </div>
+    </div>
+  );
+};
 
 // Wrap a route in both AppLayout + PrivateRoute
 const ProtectedPage = ({ children }) => (

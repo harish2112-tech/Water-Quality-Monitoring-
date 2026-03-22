@@ -9,10 +9,11 @@ import {
     Settings,
     LineChart as ChartIcon,
     Users,
-    HelpCircle
+    HelpCircle,
+    X
 } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
     const menuItems = [
         { name: 'Map', icon: MapIcon, path: '/dashboard' },
         { name: 'Reports', icon: FileText, path: '/reports' },
@@ -26,16 +27,37 @@ const Sidebar = () => {
     ];
 
     return (
-        <aside className="fixed left-0 top-0 h-screen w-64 glass-panel border-r border-white/5 flex flex-col z-50">
-            {/* Logo */}
-            <div className="p-6 flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center shadow-lg shadow-accent-gold/20">
-                    <Droplet className="text-background w-6 h-6" />
+        <>
+            {/* Backdrop for mobile */}
+            {isOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+                    onClick={onClose}
+                />
+            )}
+
+            <aside className={`
+                fixed left-0 top-0 h-screen w-64 glass-panel border-r border-white/5 flex flex-col z-50 
+                transition-transform duration-300 ease-in-out
+                ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+            `}>
+                {/* Logo & Close Button (mobile only) */}
+                <div className="p-6 flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center shadow-lg shadow-accent-gold/20">
+                            <Droplet className="text-background w-6 h-6" />
+                        </div>
+                        <span className="text-xl font-bold text-white tracking-tight">
+                            Water<span className="text-accent-gold">Watch</span>
+                        </span>
+                    </div>
+                    <button 
+                        onClick={onClose}
+                        className="p-2 text-primary-gray hover:text-white lg:hidden"
+                    >
+                        <X className="w-6 h-6" />
+                    </button>
                 </div>
-                <span className="text-xl font-bold text-white tracking-tight">
-                    Water<span className="text-accent-gold">Watch</span>
-                </span>
-            </div>
 
             {/* Navigation */}
             <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-hide">
@@ -43,6 +65,9 @@ const Sidebar = () => {
                     <NavLink
                         key={item.name}
                         to={item.path}
+                        onClick={() => {
+                            if (window.innerWidth < 1024) onClose();
+                        }}
                         className={({ isActive }) => `
               flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group
               ${isActive
@@ -60,6 +85,9 @@ const Sidebar = () => {
             <div className="p-4 border-t border-white/5">
                 <NavLink
                     to="/profile"
+                    onClick={() => {
+                        if (window.innerWidth < 1024) onClose();
+                    }}
                     className={({ isActive }) => `
                         flex items-center space-x-3 p-2 rounded-xl border border-white/5 transition-all
                         ${isActive ? 'bg-accent-gold/10 border-accent-gold/20' : 'bg-white/5 hover:bg-white/10'}
@@ -76,6 +104,7 @@ const Sidebar = () => {
                 </NavLink>
             </div>
         </aside>
+    </>
     );
 };
 
