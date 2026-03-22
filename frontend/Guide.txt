@@ -1,0 +1,3 @@
+Run npm install recharts in the frontend directory.
+Run npm run build to ensure the project compiles without errors.
+npm start
