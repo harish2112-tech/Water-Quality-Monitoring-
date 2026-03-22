@@ -63,12 +63,15 @@ const TrendChart = ({ data = [], dataKey, color = "#e6d28c", title, externalTime
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
                         <XAxis
-                            dataKey="time"
+                            dataKey="timestamp"
+                            type="number"
+                            domain={['auto', 'auto']}
                             stroke="#4b5563"
                             fontSize={10}
                             tickLine={false}
                             axisLine={false}
                             tick={{ fill: '#9ca3af' }}
+                            tickFormatter={(unix) => new Date(unix).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         />
                         <YAxis
                             stroke="#4b5563"
@@ -87,6 +90,7 @@ const TrendChart = ({ data = [], dataKey, color = "#e6d28c", title, externalTime
                                 backdropFilter: 'blur(8px)'
                             }}
                             itemStyle={{ color: color, fontWeight: 'bold' }}
+                            labelFormatter={(unix) => new Date(unix).toLocaleString()}
                             cursor={{ stroke: '#ffffff20', strokeWidth: 1 }}
                         />
                         <Area

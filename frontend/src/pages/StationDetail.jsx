@@ -38,8 +38,12 @@ const StationDetail = () => {
                     readingService.getByStation(id)
                 ]);
 
+                const formattedReadings = (readingsData || []).map(r => ({
+                    ...r,
+                    timestamp: new Date(r.recorded_at).getTime()
+                }));
                 setStation(stationData);
-                setReadings(readingsData || []);
+                setReadings(formattedReadings);
             } catch (error) {
                 console.error("Error fetching station details:", error);
             } finally {
