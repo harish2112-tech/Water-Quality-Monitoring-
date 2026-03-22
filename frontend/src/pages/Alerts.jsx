@@ -18,7 +18,6 @@ const Alerts = () => {
     useEffect(() => {
         // Fetch stations from backend API
         stationService.getAll().then(fetchedStations => {
-            setStations(fetchedStations);
             // Generate alerts based on fetched station parameters
             const generatedAlerts = [];
             fetchedStations.forEach(station => {
