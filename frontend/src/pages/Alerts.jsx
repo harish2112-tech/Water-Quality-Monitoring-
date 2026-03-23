@@ -139,7 +139,7 @@ const Alerts = () => {
     };
 
     return (
-        <div className="h-[calc(100vh-120px)] flex flex-col p-6 space-y-6 animate-in fade-in duration-700 bg-[#0a0a0a]">
+        <div className="min-h-screen flex flex-col p-4 md:p-6 space-y-6 animate-in fade-in duration-700 bg-[#0a0a0a]">
             {/* Page Header */}
             <div>
                 <h1 className="text-4xl font-black text-white uppercase tracking-tighter italic">
@@ -151,10 +151,10 @@ const Alerts = () => {
             </div>
 
             {/* Main Content: Split Pane */}
-            <div className="flex-1 flex gap-6 min-h-0">
+            <div className="flex-1 flex flex-col lg:flex-row gap-6 min-h-0">
                 
                 {/* Left Side: Alert List */}
-                <div className="w-[35%] overflow-y-auto max-h-[80vh] flex flex-col space-y-4">
+                <div className="w-full lg:w-[35%] overflow-y-auto max-h-[40vh] lg:max-h-[80vh] flex flex-col space-y-4">
                     <h2 className="text-xs font-black uppercase tracking-widest text-accent-gold/70">Active Alerts ({alerts.length})</h2>
                     <div className="flex-1 overflow-y-auto pr-2 space-y-3 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                         {alerts.map((alert) => (
@@ -199,9 +199,9 @@ const Alerts = () => {
                 </div>
 
                 {/* Right Side: Alert Details */}
-                <div className="w-[65%] overflow-y-auto max-h-[80vh]">
+                <div className="w-full lg:w-[65%] overflow-y-auto max-h-[60vh] lg:max-h-[80vh]">
                     {selectedAlert ? (
-                        <div className="min-h-full bg-white/5 border border-white/10 rounded-[32px] p-8 flex flex-col backdrop-blur-xl relative">
+                        <div className="min-h-full bg-white/5 border border-white/10 rounded-[24px] md:rounded-[32px] p-6 md:p-8 flex flex-col backdrop-blur-xl relative">
                             {/* Decorative Background Glow */}
                             <div className={`absolute -top-20 -right-20 w-64 h-64 blur-[120px] rounded-full opacity-20 ${
                                 selectedAlert.severity === 'Critical' ? 'bg-red-600' : 
@@ -221,7 +221,7 @@ const Alerts = () => {
                                                 Issued: {selectedAlert.time}
                                             </span>
                                         </div>
-                                        <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter leading-none">
+                                        <h2 className="text-2xl md:text-4xl font-black text-white uppercase italic tracking-tighter leading-none">
                                             {selectedAlert.title}
                                         </h2>
                                     </div>
@@ -245,7 +245,7 @@ const Alerts = () => {
                                 </div>
 
                                 {/* Station Info Grid */}
-                                <div className="grid grid-cols-2 gap-4 mb-10">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
                                     <div className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl group transition-all hover:bg-white/[0.05]">
                                         <p className="text-[10px] font-black uppercase text-primary-gray tracking-widest mb-2 opacity-50">Monitoring Station</p>
                                         <p className="text-lg text-white font-black italic">{selectedAlert.station}</p>
@@ -259,7 +259,7 @@ const Alerts = () => {
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="mt-auto flex gap-4">
+                                <div className="mt-auto flex flex-col sm:flex-row gap-4">
                                     <button 
                                         onClick={() => handleAcknowledge(selectedAlert.id)}
                                         className="flex-1 py-5 bg-accent-gold hover:bg-accent-gold/90 text-background rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all flex items-center justify-center space-x-2 shadow-xl shadow-accent-gold/20 active:scale-95"

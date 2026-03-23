@@ -95,17 +95,17 @@ const StationDetail = () => {
                 <span className="text-xs font-black uppercase tracking-widest">Back to Fleet Overview</span>
             </button>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-4 md:px-0">
                 {/* Left Column: Station Info */}
                 <div className="lg:col-span-1 space-y-6">
-                    <GlassCard className="p-8 border-accent-gold/20 relative overflow-hidden">
+                    <GlassCard className="p-5 md:p-8 border-accent-gold/20 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-accent-gold/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
 
                         <div className="mb-8">
                             <p className="text-[10px] text-accent-gold uppercase tracking-[0.3em] font-black mb-2 flex items-center">
                                 <Waves className="w-3 h-3 mr-2" /> {station.river || "Regional Waters"}
                             </p>
-                            <h1 className="text-3xl font-black text-white leading-tight uppercase tracking-tighter italic">{station.name}</h1>
+                            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight uppercase tracking-tighter italic">{station.name}</h1>
                             <div className="mt-4 flex items-center space-x-3">
                                 <StatusBadge status={station.status} className="scale-110 origin-left" />
                                 <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-none border-l border-white/10 pl-3">
@@ -155,12 +155,12 @@ const StationDetail = () => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 mt-10 border-t border-white/5 pt-8">
-                            <button className="py-3 px-4 rounded-xl border border-accent-gold/30 text-accent-gold text-xs font-black uppercase tracking-widest hover:bg-accent-gold/10 transition-all flex items-center justify-center space-x-2">
+                        <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 mt-10 border-t border-white/5 pt-8">
+                            <button className="py-3.5 px-4 rounded-xl border border-accent-gold/30 text-accent-gold text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-accent-gold/10 transition-all flex items-center justify-center space-x-2">
                                 <Zap className="w-4 h-4" />
                                 <span>Broadcast</span>
                             </button>
-                            <button className="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center space-x-2">
+                            <button className="py-3.5 px-4 rounded-xl bg-white/5 border border-white/10 text-white text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center space-x-2">
                                 <Users className="w-4 h-4" />
                                 <span>Collaborate</span>
                             </button>
@@ -195,12 +195,12 @@ const StationDetail = () => {
                         ))}
                     </div>
 
-                    <GlassCard className="p-10 border-white/5 min-h-[500px] relative overflow-hidden">
+                    <GlassCard className="p-6 md:p-10 border-white/5 min-h-[500px] relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none"></div>
                         
-                        <div className="flex items-center justify-between mb-10 border-b border-white/5 pb-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-10 border-b border-white/5 pb-6 gap-6">
                             <div>
-                                <h4 className="text-2xl font-black text-white uppercase italic tracking-tighter">Scientific <span className="text-accent-gold">Trend Analysis</span></h4>
+                                <h4 className="text-xl md:text-2xl font-black text-white uppercase italic tracking-tighter">Scientific <span className="text-accent-gold">Trend Analysis</span></h4>
                                 <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mt-1">Advanced multi-parameter telemetry link</p>
                             </div>
                             <div className="flex items-center space-x-2">

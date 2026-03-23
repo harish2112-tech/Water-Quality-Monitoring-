@@ -29,10 +29,10 @@ const TrendChart = ({ data = [], dataKey, color = "#e6d28c", title, externalTime
 
     return (
         <div className="w-full h-72 mt-4">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
                 <div>
-                    <h5 className="text-sm font-bold text-white uppercase tracking-widest">{title}</h5>
-                    <p className="text-[10px] text-primary-gray mt-0.5">Statistical variance over selected period</p>
+                    <h5 className="text-xs md:text-sm font-bold text-white uppercase tracking-widest">{title}</h5>
+                    <p className="text-[9px] md:text-[10px] text-primary-gray mt-0.5">Statistical variance over selected period</p>
                 </div>
                 {!externalTimeRange && (
                     <div className="flex space-x-1 bg-white/5 p-1 rounded-lg border border-white/10">
