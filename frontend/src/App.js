@@ -14,9 +14,12 @@ import Alerts from "./pages/Alerts";
 import AlertDetails from "./pages/AlertDetails";
 import AlertTrends from "./pages/AlertTrends";
 import Profile from "./pages/Profile";
+import NgoDashboard from './pages/ngo/Dashboard';
+import AuthorityDashboard from './pages/authority/Dashboard';
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import { MainBackground } from "./components/Background/MainBackground";
+import RoleGuard from './components/RoleGuard';
 
 // Placeholder component for missing features
 const Placeholder = ({ name }) => (
@@ -70,6 +73,22 @@ function App() {
           <Route path="/alerts" element={<ProtectedPage><Alerts /></ProtectedPage>} />
           <Route path="/alerts/:id" element={<ProtectedPage><AlertDetails /></ProtectedPage>} />
           <Route path="/alert-trends" element={<ProtectedPage><AlertTrends /></ProtectedPage>} />
+          
+          {/* Milestone 4 Portals */}
+          <Route path="/ngo/dashboard" element={
+            <ProtectedPage>
+              <RoleGuard allowedRoles={['ngo', 'admin']}>
+                <NgoDashboard />
+              </RoleGuard>
+            </ProtectedPage>
+          } />
+          <Route path="/authority/dashboard" element={
+            <ProtectedPage>
+              <RoleGuard allowedRoles={['authority', 'admin']}>
+                <AuthorityDashboard />
+              </RoleGuard>
+            </ProtectedPage>
+          } />
           <Route path="/collaborations" element={<ProtectedPage><Placeholder name="Collaborations" /></ProtectedPage>} />
           <Route path="/settings" element={<ProtectedPage><Placeholder name="Settings" /></ProtectedPage>} />
           <Route path="/support" element={<ProtectedPage><Placeholder name="Support" /></ProtectedPage>} />

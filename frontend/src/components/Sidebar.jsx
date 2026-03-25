@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import {
     BarChart3,
     Map as MapIcon,
@@ -8,12 +9,15 @@ import {
     Droplet,
     Settings,
     LineChart as ChartIcon,
-    Users,
     HelpCircle,
-    X
+    X,
+    ShieldCheck,
+    Briefcase
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
+    const { user } = useAuth();
+
     const menuItems = [
         { name: 'Map', icon: MapIcon, path: '/dashboard' },
         { name: 'Reports', icon: FileText, path: '/reports' },
@@ -21,10 +25,17 @@ const Sidebar = ({ isOpen, onClose }) => {
         { name: 'Trends', icon: ChartIcon, path: '/alert-trends' },
         { name: 'Stations', icon: Droplet, path: '/stations' },
         { name: 'Analytics', icon: BarChart3, path: '/analytics' },
-        { name: 'Collaborations', icon: Users, path: '/collaborations' },
         { name: 'Settings', icon: Settings, path: '/settings' },
         { name: 'Support', icon: HelpCircle, path: '/support' },
     ];
+
+    // Role-specific portals (Milestone 4)
+    if (user?.role === 'ngo' || user?.role === 'admin') {
+        menuItems.splice(3, 0, { name: 'NGO Portal', icon: Briefcase, path: '/ngo/dashboard' });
+    }
+    if (user?.role === 'authority' || user?.role === 'admin') {
+        menuItems.splice(4, 0, { name: 'Authority Portal', icon: ShieldCheck, path: '/authority/dashboard' });
+    }
 
     return (
         <>
@@ -98,8 +109,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-safe border-2 border-background rounded-full"></div>
                     </div>
                     <div className="flex-1 overflow-hidden">
-                        <p className="text-sm font-semibold text-white truncate">John Doe</p>
-                        <p className="text-[10px] text-primary-gray uppercase tracking-tighter">Citizen User</p>
+                        <p className="text-sm font-semibold text-white truncate">{user?.name || "Guest User"}</p>
+                        <p className="text-[10px] text-accent-gold uppercase tracking-tighter font-bold">{user?.role || "Visitor"} Account</p>
                     </div>
                 </NavLink>
             </div>
