@@ -15,6 +15,8 @@ class WaterStation(Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     managed_by = Column(String, nullable=True)
+    external_site_id = Column(String, nullable=True, index=True) # USGS site number
+    data_source = Column(String, default="internal") # internal, usgs
     
     # Environmental Parameters
     wqi = Column(Integer, nullable=True)

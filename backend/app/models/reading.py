@@ -28,3 +28,4 @@ class WaterReading(Base):
     value = Column(Float, nullable=False)
     recorded_at = Column(DateTime, default=datetime.utcnow)
     is_safe = Column(Boolean, default=True)
+    data_source = Column(String, default="sensor") # sensor, manual, usgs

@@ -32,7 +32,9 @@ def create_station(db: Session, data: StationCreate) -> WaterStation:
         temperature=data.temperature,
         lead=data.lead,
         arsenic=data.arsenic,
-        status=data.status
+        status=data.status,
+        external_site_id=data.external_site_id,
+        data_source=data.data_source or "internal"
     )
     db.add(station)
     db.commit()

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     ArrowLeft,
@@ -9,11 +9,13 @@ import {
     Users,
     Thermometer,
     Wind,
-    ShieldCheck,
-    AlertCircle,
-    Activity,
     Droplets,
-    Waves
+    Waves,
+    RefreshCw,
+    Database,
+    Activity,
+    ShieldCheck,
+    AlertCircle
 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
 import StatusBadge from '../components/StatusBadge';
@@ -21,37 +23,70 @@ import TrendChart from '../components/TrendChart';
 import ReadingCard from '../components/ReadingCard';
 import { stationService } from '../services/stationService';
 import { readingService } from '../services/readingService';
+import { useAuth } from '../context/AuthContext';
 
 const StationDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [station, setStation] = useState(null);
     const [readings, setReadings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [syncing, setSyncing] = useState(false);
+    const [isEditingSiteId, setIsEditingSiteId] = useState(false);
+    const [newSiteId, setNewSiteId] = useState('');
     const [timeFilter, setTimeFilter] = useState('D');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [stationData, readingsData] = await Promise.all([
-                    stationService.getById(id),
-                    readingService.getByStation(id)
-                ]);
+    const fetchData = useCallback(async () => {
+        try {
+            const [stationData, readingsData] = await Promise.all([
+                stationService.getById(id),
+                readingService.getByStation(id)
+            ]);
 
-                const formattedReadings = (readingsData || []).map(r => ({
-                    ...r,
-                    timestamp: new Date(r.recorded_at).getTime()
-                }));
-                setStation(stationData);
-                setReadings(formattedReadings);
-            } catch (error) {
-                console.error("Error fetching station details:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
+            const formattedReadings = (readingsData || []).map(r => ({
+                ...r,
+                timestamp: new Date(r.recorded_at).getTime()
+            }));
+            setStation(stationData);
+            setNewSiteId(stationData?.external_site_id || '');
+            setReadings(formattedReadings);
+        } catch (error) {
+            console.error("Error fetching station details:", error);
+        } finally {
+            setLoading(false);
+        }
     }, [id]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    const handleSync = async () => {
+        setSyncing(true);
+        try {
+            await stationService.syncExternal(id);
+            await fetchData();
+            alert("External synchronization complete. Latest measurements ingested.");
+        } catch (error) {
+            console.error("Sync error:", error);
+            alert("USGS Synchronization failed. Check site connectivity and site ID.");
+        } finally {
+            setSyncing(false);
+        }
+    };
+
+    const handleUpdateSiteId = async () => {
+        try {
+            await stationService.update(id, { external_site_id: newSiteId });
+            await fetchData();
+            setIsEditingSiteId(false);
+            alert("Station linked to USGS site successfully.");
+        } catch (error) {
+            console.error("Update site error:", error);
+            alert("Failed to update site link.");
+        }
+    };
 
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-[60vh] text-white">
@@ -77,9 +112,9 @@ const StationDetail = () => {
     const currentReading = (readings && readings.length > 0) ? readings[readings.length - 1] : {};
 
     const readingParams = [
-        { label: 'pH Level', value: currentReading?.pH || station.ph, unit: 'pH', icon: Activity },
+        { label: 'pH Level', value: currentReading?.ph || station.ph, unit: 'pH', icon: Activity },
         { label: 'Turbidity', value: currentReading?.turbidity || station.turbidity, unit: 'NTU', icon: Droplets },
-        { label: 'Dissolved Oxygen', value: currentReading?.dissolvedOxygen || station.dissolved_oxygen, unit: 'mg/L', icon: Wind },
+        { label: 'Dissolved Oxygen', value: currentReading?.dissolved_oxygen || station.dissolved_oxygen, unit: 'mg/L', icon: Wind },
         { label: 'Lead', value: currentReading?.lead || station.lead, unit: 'ppm', icon: ShieldCheck },
         { label: 'Arsenic', value: currentReading?.arsenic || station.arsenic, unit: 'ppm', icon: AlertCircle },
         { label: 'Temperature', value: currentReading?.temperature || station.temperature, unit: '°C', icon: Thermometer },
@@ -145,7 +180,7 @@ const StationDetail = () => {
                                 <div>
                                     <p className="text-[10px] text-white/60 uppercase font-black tracking-widest">Last Update</p>
                                     <p className="text-white text-sm mt-0.5 font-medium">
-                                        {new Date(station.last_transmission).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (System Time)
+                                        {new Date(station.last_transmission || station.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (System Time)
                                     </p>
                                     <div className="flex items-center mt-2">
                                         <span className="w-2 h-2 bg-safe rounded-full mr-2 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse"></span>
@@ -156,15 +191,100 @@ const StationDetail = () => {
                         </div>
 
                         <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 mt-10 border-t border-white/5 pt-8">
-                            <button className="py-3.5 px-4 rounded-xl border border-accent-gold/30 text-accent-gold text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-accent-gold/10 transition-all flex items-center justify-center space-x-2">
-                                <Zap className="w-4 h-4" />
-                                <span>Broadcast</span>
-                            </button>
+                            {station.external_site_id && (user?.role === 'admin' || user?.role === 'ngo') ? (
+                                <button 
+                                    onClick={handleSync}
+                                    disabled={syncing}
+                                    className="py-3.5 px-4 rounded-xl bg-accent-gold text-ocean-deep text-[10px] md:text-xs font-black uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center space-x-2 shadow-lg shadow-accent-gold/20 disabled:opacity-50"
+                                >
+                                    {syncing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                                    <span>Sync USGS</span>
+                                </button>
+                            ) : (
+                                <button className="py-3.5 px-4 rounded-xl border border-accent-gold/30 text-accent-gold text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-accent-gold/10 transition-all flex items-center justify-center space-x-2">
+                                    <Zap className="w-4 h-4" />
+                                    <span>Broadcast</span>
+                                </button>
+                            )}
                             <button className="py-3.5 px-4 rounded-xl bg-white/5 border border-white/10 text-white text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center space-x-2">
                                 <Users className="w-4 h-4" />
                                 <span>Collaborate</span>
                             </button>
                         </div>
+                        
+                        {user?.role === 'admin' && (
+                            <div className="mt-6 p-4 bg-white/5 rounded-2xl border border-white/5">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="p-2 bg-accent-gold/10 rounded-lg">
+                                            <Database className="w-4 h-4 text-accent-gold" />
+                                        </div>
+                                        <p className="text-[10px] uppercase font-black text-white/60 tracking-widest">USGS Site Link</p>
+                                    </div>
+                                    {!isEditingSiteId ? (
+                                        <button 
+                                            onClick={() => setIsEditingSiteId(true)}
+                                            className="text-[10px] text-accent-gold font-black uppercase hover:underline"
+                                        >
+                                            Modify Link
+                                        </button>
+                                    ) : (
+                                        <div className="flex items-center space-x-3">
+                                            <button 
+                                                onClick={() => setIsEditingSiteId(false)}
+                                                className="text-[10px] text-white/40 font-black uppercase hover:text-white"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button 
+                                                onClick={handleUpdateSiteId}
+                                                className="text-[10px] text-safe font-black uppercase hover:underline"
+                                            >
+                                                Save
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                {!isEditingSiteId ? (
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-xs font-mono text-white font-bold">{station.external_site_id || "Unlinked"}</p>
+                                        {station.external_site_id && (
+                                            <span className="text-[8px] px-2 py-1 bg-accent-gold/20 text-accent-gold rounded-full font-black uppercase tracking-tighter">USGS-NWIS</span>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <input 
+                                        type="text"
+                                        value={newSiteId}
+                                        onChange={(e) => setNewSiteId(e.target.value)}
+                                        placeholder="e.g. 05430500"
+                                        className="w-full bg-black/20 border border-white/10 rounded-lg py-2 px-3 text-white text-xs font-mono focus:border-accent-gold/50 outline-none"
+                                    />
+                                )}
+                            </div>
+                        )}
+
+                        {!station.external_site_id && user?.role !== 'admin' && (
+                            <div className="mt-6 p-4 border border-dashed border-white/10 rounded-2xl opacity-40 text-center">
+                                <p className="text-[10px] text-white font-medium uppercase tracking-widest italic">Local Monitoring Node Only</p>
+                            </div>
+                        )}
+
+                        {station.external_site_id && user?.role !== 'admin' && (
+                            <div className="mt-6 p-4 bg-white/5 rounded-2xl border border-white/5 flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                    <div className="p-2 bg-accent-gold/10 rounded-lg">
+                                        <Database className="w-4 h-4 text-accent-gold" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[8px] uppercase font-black text-white/40 tracking-widest">Linked Site ID</p>
+                                        <p className="text-xs font-mono text-white font-bold">{station.external_site_id}</p>
+                                    </div>
+                                </div>
+                                <span className="text-[8px] px-2 py-1 bg-accent-gold/20 text-accent-gold rounded-full font-black uppercase tracking-tighter">USGS-NWIS</span>
+                            </div>
+                        )}
                     </GlassCard>
 
                     <GlassCard className="p-6 bg-white/5 border-white/5 hover:border-accent-gold/20 transition-all">
@@ -218,9 +338,9 @@ const StationDetail = () => {
 
                         {readings.length > 0 ? (
                             <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-12 gap-y-16">
-                                <TrendChart data={readings} dataKey="pH" title="pH Level Variance" color="#10b981" externalTimeRange={timeFilter} />
+                                <TrendChart data={readings} dataKey="ph" title="pH Level Variance" color="#10b981" externalTimeRange={timeFilter} />
                                 <TrendChart data={readings} dataKey="turbidity" title="Turbidity Fluctuation" color="#f59e0b" externalTimeRange={timeFilter} />
-                                <TrendChart data={readings} dataKey="dissolvedOxygen" title="Dissolved Oxygen (DO)" color="#3b82f6" externalTimeRange={timeFilter} />
+                                <TrendChart data={readings} dataKey="dissolved_oxygen" title="Dissolved Oxygen (DO)" color="#3b82f6" externalTimeRange={timeFilter} />
                                 <TrendChart data={readings} dataKey="lead" title="Lead Concentration" color="#ef4444" externalTimeRange={timeFilter} />
                             </div>
                         ) : (

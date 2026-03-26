@@ -7,6 +7,7 @@ from app.schemas.station import StationCreate, StationUpdate, StationResponse
 from app.services import station_service
 from app.services.auth import get_current_user
 from app.models.user import User, UserRole
+from app.services import usgs_service
 
 router = APIRouter(prefix="/api/stations", tags=["Water Stations"])
 
@@ -79,3 +80,20 @@ def delete_station(
     deleted = station_service.delete_station(db, station_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Station not found")
+    return None
+
+
+@router.post("/{station_id}/sync-external")
+async def sync_external_data(
+    station_id: int,
+    db: Session = Depends(get_db),
+    _=Depends(require_admin_or_authority),
+):
+    """Trigger manual sync with USGS for a specific station (admin/authority only)."""
+    result = await usgs_service.sync_station_with_usgs(db, station_id)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Sync failed. Ensure Station has a valid External Site ID and USGS service is available."
+        )
+    return result

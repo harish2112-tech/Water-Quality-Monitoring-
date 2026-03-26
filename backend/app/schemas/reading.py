@@ -33,6 +33,7 @@ class ReadingResponse(BaseModel):
     value: float
     recorded_at: datetime
     is_safe: bool
+    data_source: str # sensor, manual, usgs
 
     class Config:
         from_attributes = True
