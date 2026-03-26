@@ -16,6 +16,7 @@ import AlertTrends from "./pages/AlertTrends";
 import Profile from "./pages/Profile";
 import NgoDashboard from './pages/ngo/Dashboard';
 import AuthorityDashboard from './pages/authority/Dashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import { MainBackground } from "./components/Background/MainBackground";
@@ -86,6 +87,13 @@ function App() {
             <ProtectedPage>
               <RoleGuard allowedRoles={['authority', 'admin']}>
                 <AuthorityDashboard />
+              </RoleGuard>
+            </ProtectedPage>
+          } />
+          <Route path="/admin/dashboard" element={
+            <ProtectedPage>
+              <RoleGuard allowedRoles={['admin']}>
+                <AdminDashboard />
               </RoleGuard>
             </ProtectedPage>
           } />

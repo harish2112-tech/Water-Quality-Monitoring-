@@ -36,6 +36,9 @@ const Sidebar = ({ isOpen, onClose }) => {
     if (user?.role === 'authority' || user?.role === 'admin') {
         menuItems.splice(4, 0, { name: 'Authority Portal', icon: ShieldCheck, path: '/authority/dashboard' });
     }
+    if (user?.role === 'admin') {
+        menuItems.splice(5, 0, { name: 'Admin Panel', icon: Settings, path: '/admin/dashboard' });
+    }
 
     return (
         <>

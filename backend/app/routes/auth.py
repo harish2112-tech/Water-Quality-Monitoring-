@@ -10,7 +10,36 @@ router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
-    """Register a new user account."""
+    """Register a new user account (Public: Citizen & NGO only)."""
+    if user_data.role == "authority":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Authority accounts can only be created by an Admin."
+        )
+        
+    existing = user_service.get_user_by_email(db, user_data.email)
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email is already registered",
+        )
+    user = user_service.create_user(db, user_data)
+    return user
+
+
+@router.post("/admin/create-user", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def admin_create_user(
+    user_data: UserCreate, 
+    db: Session = Depends(get_db),
+    current_user=Depends(auth_service.get_current_user)
+):
+    """Admin-only endpoint to create any user role (including Authority)."""
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only administrators can create Authority accounts."
+        )
+        
     existing = user_service.get_user_by_email(db, user_data.email)
     if existing:
         raise HTTPException(

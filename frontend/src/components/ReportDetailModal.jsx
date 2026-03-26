@@ -42,6 +42,12 @@ const ReportDetailModal = ({ report, onClose }) => {
                         <div>
                             <p className="text-[10px] uppercase font-black text-primary-gray tracking-widest">Status</p>
                             <p className="text-sm font-bold text-white uppercase tracking-tighter">{report.status}</p>
+                            
+                            {report.status !== 'PENDING' && report.verified_at && (
+                                <p className="text-[9px] text-white/40 mt-1 uppercase font-bold tracking-tighter">
+                                    {report.status === 'VERIFIED' ? 'Verified' : 'Rejected'} on {new Date(report.verified_at).toLocaleDateString()}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -113,7 +119,7 @@ const ReportDetailModal = ({ report, onClose }) => {
                         </div>
                     </div>
 
-                    {/* Photo URL if exists */}
+                    {/* Evidence Photo */}
                     {report.photo_url && (
                         <div className="space-y-2">
                             <p className="text-[10px] uppercase font-black text-primary-gray tracking-widest">Evidence Photo</p>
@@ -127,6 +133,32 @@ const ReportDetailModal = ({ report, onClose }) => {
                             </div>
                         </div>
                     )}
+
+                    {/* Moderation Section */}
+                    <div className="space-y-4 pt-6 border-t border-white/5">
+                        <p className="text-[10px] uppercase font-black text-accent-gold tracking-[0.2em]">Official Verification Details</p>
+                        <div className="p-4 rounded-xl bg-accent-gold/5 border border-accent-gold/10">
+                            {report.status === 'PENDING' ? (
+                                <p className="text-xs text-primary-gray italic">
+                                    Your report is currently being reviewed by our team of specialists. We will notify you once a determination has been made.
+                                </p>
+                            ) : (
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest">
+                                        <span className="text-primary-gray">Reviewer ID</span>
+                                        <span className="text-white">AUTH-{report.verified_by || "OFFICIAL"}</span>
+                                    </div>
+                                    <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest">
+                                        <span className="text-primary-gray">Resolution Date</span>
+                                        <span className="text-white">{new Date(report.verified_at).toLocaleString()}</span>
+                                    </div>
+                                    <div className="mt-4 p-3 bg-white/5 rounded-lg text-xs text-white/80 border border-white/5 italic">
+                                        "The data provided has been cross-referenced with regional monitoring stations and system-wide baseline parameters."
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 {/* Footer */}

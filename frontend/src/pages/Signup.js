@@ -178,7 +178,6 @@ const Signup = () => {
                     <option value="">Select your role</option>
                     <option value="citizen">Citizen</option>
                     <option value="ngo">NGO</option>
-                    <option value="authority">Authority</option>
                   </select>
                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean-light/30 pointer-events-none" />
                 </div>
