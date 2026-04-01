@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import MapMarker from '../components/MapMarker';
 import { stationService } from '../services/stationService';
-import { Locate, Loader2 } from 'lucide-react';
+import { Locate, Loader2, Layers } from 'lucide-react';
+import { useMap } from '../context/MapContext';
 
 const BaseMapView = () => {
     const [stations, setStations] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { showNGOStations, setShowNGOStations } = useMap();
 
     useEffect(() => {
         const fetchStations = async () => {
@@ -52,13 +54,24 @@ const BaseMapView = () => {
                     />
                     <ZoomControl position="bottomleft" />
 
-                    {!loading && stations.map(station => (
-                        <MapMarker key={station.id} station={station} />
-                    ))}
+                    {!loading && stations
+                        .filter(s => showNGOStations || (s.managed_by?.toLowerCase() !== 'ngo' && !s.managed_by?.toLowerCase().includes('ngo')))
+                        .map(station => (
+                            <MapMarker key={station.id} station={station} />
+                        ))}
                 </MapContainer>
 
                 {/* Map Overlay Controls */}
                 <div className="absolute top-4 right-4 flex flex-col space-y-2 z-[1000]">
+                    <button 
+                        onClick={() => setShowNGOStations(!showNGOStations)}
+                        className={`p-3 backdrop-blur-md rounded-xl border transition-all shadow-lg group ${
+                            showNGOStations ? 'bg-accent-gold/20 border-accent-gold/40 text-accent-gold' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                        }`}
+                        title="Toggle NGO Stations"
+                    >
+                        <Layers className={`w-5 h-5 group-hover:scale-110 transition-transform ${showNGOStations ? 'animate-pulse' : ''}`} />
+                    </button>
                     <button className="p-3 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 text-white hover:bg-white/10 transition-all shadow-lg group">
                         <Locate className="w-5 h-5 text-accent-gold group-hover:scale-110 transition-transform" />
                     </button>
@@ -79,6 +92,12 @@ const BaseMapView = () => {
                         <div className="flex items-center space-x-3">
                             <div className="w-3 h-3 rounded-full bg-critical shadow-[0_0_8px_rgba(239,68,68,0.5)]"></div>
                             <span className="text-[10px] text-primary-gray font-bold uppercase">Critical Alert</span>
+                        </div>
+                        <div className="pt-2 mt-2 border-t border-white/5">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-3 h-3 rounded-full bg-[#2dd4bf] shadow-[0_0_8px_rgba(45,212,191,0.5)]"></div>
+                                <span className="text-[10px] text-primary-gray font-bold uppercase italic">NGO Managed</span>
+                            </div>
                         </div>
                     </div>
                 </div>

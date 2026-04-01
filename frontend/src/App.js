@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
+import RoleGuard from "./components/RoleGuard";
+import { MapProvider } from "./context/MapContext";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/ngo/Dashboard";
 import BaseMapView from "./pages/BaseMapView";
 import Reports from "./pages/Reports";
 import Stations from "./pages/Stations";
@@ -13,14 +15,14 @@ import Analytics from "./pages/Analytics";
 import Alerts from "./pages/Alerts";
 import AlertDetails from "./pages/AlertDetails";
 import AlertTrends from "./pages/AlertTrends";
+import AuthorityDashboard from "./pages/AuthorityDashboard";
+import RequireRole from "./components/RequireRole";
 import Profile from "./pages/Profile";
-import NgoDashboard from './pages/ngo/Dashboard';
-import AuthorityDashboard from './pages/authority/Dashboard';
-import AdminDashboard from './pages/admin/AdminDashboard';
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import { MainBackground } from "./components/Background/MainBackground";
-import RoleGuard from './components/RoleGuard';
+import Collaborations from "./pages/Collaborations";
+import UserManagement from "./pages/admin/UserManagement";
 
 // Placeholder component for missing features
 const Placeholder = ({ name }) => (
@@ -29,22 +31,30 @@ const Placeholder = ({ name }) => (
   </div>
 );
 
-const AppLayout = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const AppLayout = ({ children }) => (
+  <div className="min-h-screen bg-ocean-deep text-white relative">
+    <MainBackground />
+    <Sidebar />
+    <Navbar />
+    <main className="pl-64 pt-16 h-screen overflow-y-auto scrollbar-custom relative z-10">
+      <div className="p-8">{children}</div>
+    </main>
+  </div>
+);
 
-  return (
-    <div className="min-h-screen bg-ocean-deep text-white relative flex overflow-hidden">
-      <MainBackground />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 flex flex-col min-w-0 relative">
-        <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <main className="flex-1 pt-16 lg:pl-64 h-screen overflow-y-auto scrollbar-custom relative z-10 transition-all duration-300">
-          <div className="p-4 md:p-8 w-full max-w-[1600px] mx-auto">{children}</div>
-        </main>
-      </div>
-    </div>
-  );
-};
+// Forbidden access component
+const Forbidden = () => (
+  <div className="flex flex-col items-center justify-center p-20 space-y-4">
+    <div className="text-4xl font-black text-critical uppercase tracking-tighter shadow-lg shadow-critical/20">403 Forbidden</div>
+    <div className="text-primary-gray italic text-center max-w-md">You do not have permission to access این specialized resource. Please contact your coordinator.</div>
+    <button 
+      onClick={() => window.history.back()}
+      className="px-8 py-3 bg-accent-gold text-background font-black uppercase rounded-xl hover:scale-105 transition-all shadow-xl shadow-accent-gold/20"
+    >
+      Return to Safety
+    </button>
+  </div>
+);
 
 // Wrap a route in both AppLayout + PrivateRoute
 const ProtectedPage = ({ children }) => (
@@ -53,57 +63,67 @@ const ProtectedPage = ({ children }) => (
   </PrivateRoute>
 );
 
+
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Auth Routes */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+      <MapProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Auth Routes */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
-          {/* Protected Routes */}
-          <Route path="/dashboard" element={<ProtectedPage><BaseMapView /></ProtectedPage>} />
-          <Route path="/map" element={<ProtectedPage><BaseMapView /></ProtectedPage>} />
-          <Route path="/reports" element={<ProtectedPage><Reports /></ProtectedPage>} />
-          <Route path="/stations" element={<ProtectedPage><Stations /></ProtectedPage>} />
-          <Route path="/stations/:id" element={<ProtectedPage><StationDetail /></ProtectedPage>} />
-          <Route path="/analytics" element={<ProtectedPage><Analytics /></ProtectedPage>} />
-          <Route path="/profile" element={<ProtectedPage><Profile /></ProtectedPage>} />
-          <Route path="/alerts" element={<ProtectedPage><Alerts /></ProtectedPage>} />
-          <Route path="/alerts/:id" element={<ProtectedPage><AlertDetails /></ProtectedPage>} />
-          <Route path="/alert-trends" element={<ProtectedPage><AlertTrends /></ProtectedPage>} />
-          
-          {/* Milestone 4 Portals */}
-          <Route path="/ngo/dashboard" element={
-            <ProtectedPage>
-              <RoleGuard allowedRoles={['ngo', 'admin']}>
-                <NgoDashboard />
-              </RoleGuard>
-            </ProtectedPage>
-          } />
-          <Route path="/authority/dashboard" element={
-            <ProtectedPage>
-              <RoleGuard allowedRoles={['authority', 'admin']}>
-                <AuthorityDashboard />
-              </RoleGuard>
-            </ProtectedPage>
-          } />
-          <Route path="/admin/dashboard" element={
-            <ProtectedPage>
-              <RoleGuard allowedRoles={['admin']}>
-                <AdminDashboard />
-              </RoleGuard>
-            </ProtectedPage>
-          } />
-          <Route path="/collaborations" element={<ProtectedPage><Placeholder name="Collaborations" /></ProtectedPage>} />
-          <Route path="/settings" element={<ProtectedPage><Placeholder name="Settings" /></ProtectedPage>} />
-          <Route path="/support" element={<ProtectedPage><Placeholder name="Support" /></ProtectedPage>} />
+            {/* Protected Routes */}
+            <Route path="/dashboard" element={<ProtectedPage><BaseMapView /></ProtectedPage>} />
+            <Route path="/map" element={<ProtectedPage><BaseMapView /></ProtectedPage>} />
+            <Route path="/reports" element={<ProtectedPage><Reports /></ProtectedPage>} />
+            <Route path="/stations" element={<ProtectedPage><Stations /></ProtectedPage>} />
+            <Route path="/stations/:id" element={<ProtectedPage><StationDetail /></ProtectedPage>} />
+            <Route path="/analytics" element={<ProtectedPage><Analytics /></ProtectedPage>} />
+            <Route path="/profile" element={<ProtectedPage><Profile /></ProtectedPage>} />
+            <Route path="/alerts" element={<ProtectedPage><Alerts /></ProtectedPage>} />
+            <Route path="/alerts/:id" element={<ProtectedPage><AlertDetails /></ProtectedPage>} />
+            <Route path="/alert-trends" element={<ProtectedPage><AlertTrends /></ProtectedPage>} />
+            
+            {/* Authority/Admin Moderation Routes */}
+            <Route path="/authority/dashboard" element={
+              <ProtectedPage>
+                  <RequireRole allowedRoles={['admin', 'authority']}>
+                      <AuthorityDashboard />
+                  </RequireRole>
+              </ProtectedPage>
+            } />
 
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Admin-Only User Management */}
+            <Route path="/admin/users" element={
+              <ProtectedPage>
+                  <RequireRole allowedRoles={['admin']}>
+                      <UserManagement />
+                  </RequireRole>
+              </ProtectedPage>
+            } />
+
+            {/* NGO Portal */}
+            <Route 
+              path="/ngo/dashboard" 
+              element={
+                <RoleGuard roles={["ngo", "admin"]}>
+                  <ProtectedPage><Dashboard /></ProtectedPage>
+                </RoleGuard>
+              } 
+            />
+            <Route path="/403" element={<AppLayout><Forbidden /></AppLayout>} />
+
+            <Route path="/collaborations" element={<ProtectedPage><Collaborations /></ProtectedPage>} />
+            <Route path="/settings" element={<ProtectedPage><Placeholder name="Settings" /></ProtectedPage>} />
+            <Route path="/support" element={<ProtectedPage><Placeholder name="Support" /></ProtectedPage>} />
+
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </MapProvider>
     </AuthProvider>
   );
 }

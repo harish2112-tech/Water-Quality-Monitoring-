@@ -15,7 +15,4 @@ export const stationService = {
 
   /** Delete a station */
   delete: (id) => api.delete(`/api/stations/${id}`),
-
-  /** Sync station with external USGS data */
-  syncExternal: (id) => api.post(`/api/stations/${id}/sync-external`).then(r => r.data),
 };

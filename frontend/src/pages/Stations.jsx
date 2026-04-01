@@ -23,6 +23,9 @@ const Stations = () => {
     const handleApplyFilters = (filters) => {
         let results = stations;
 
+
+
+
         if (filters.search) {
             results = results.filter(s =>
                 (s.name && s.name.toLowerCase().includes(filters.search.toLowerCase())) ||

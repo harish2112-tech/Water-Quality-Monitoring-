@@ -11,8 +11,6 @@ class StationCreate(BaseModel):
     latitude: float
     longitude: float
     managed_by: Optional[str] = None
-    external_site_id: Optional[str] = None
-    data_source: Optional[str] = "internal"
     wqi: Optional[int] = None
     ph: Optional[float] = None
     turbidity: Optional[float] = None
@@ -32,8 +30,6 @@ class StationUpdate(BaseModel):
     longitude: Optional[float] = None
     is_active: Optional[bool] = None
     managed_by: Optional[str] = None
-    external_site_id: Optional[str] = None
-    data_source: Optional[str] = None
     wqi: Optional[int] = None
     ph: Optional[float] = None
     turbidity: Optional[float] = None
@@ -53,8 +49,6 @@ class StationResponse(BaseModel):
     latitude: float
     longitude: float
     managed_by: Optional[str]
-    external_site_id: Optional[str]
-    data_source: Optional[str]
     wqi: Optional[int]
     ph: Optional[float]
     turbidity: Optional[float]

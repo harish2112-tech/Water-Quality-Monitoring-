@@ -107,7 +107,7 @@ def get_reports(db: Session, user=None, skip: int = 0, limit: int = 200) -> List
     """
     query = db.query(Report)
     
-    if user and user.role not in ["ngo", "admin"]:
+    if user and user.role not in ["ngo", "admin", "authority"]:
         query = query.filter(or_(Report.user_id == user.id, Report.status == "VERIFIED"))
         
     return (

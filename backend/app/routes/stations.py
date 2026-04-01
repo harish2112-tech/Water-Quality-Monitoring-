@@ -1,15 +1,15 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.schemas.station import StationCreate, StationUpdate, StationResponse
-from app.services import station_service
+from app.schemas.reading import ReadingResponse
+from app.services import station_service, report_service
 from app.services.auth import get_current_user
 from app.models.user import User, UserRole
-from app.services import usgs_service
 
-router = APIRouter(prefix="/api/stations", tags=["Water Stations"])
+router = APIRouter(prefix="/stations", tags=["Water Stations"])
 
 
 def require_admin_or_authority(current_user: User = Depends(get_current_user)):
@@ -82,18 +82,14 @@ def delete_station(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Station not found")
     return None
 
+from app.schemas.reading import ReadingResponse, AggregateReadingResponse
 
-@router.post("/{station_id}/sync-external")
-async def sync_external_data(
+@router.get("/readings/aggregate", response_model=List[AggregateReadingResponse])
+def get_station_readings_aggregate(
     station_id: int,
+    period: Optional[int] = 24,
     db: Session = Depends(get_db),
-    _=Depends(require_admin_or_authority),
+    _=Depends(get_current_user),
 ):
-    """Trigger manual sync with USGS for a specific station (admin/authority only)."""
-    result = await usgs_service.sync_station_with_usgs(db, station_id)
-    if not result:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Sync failed. Ensure Station has a valid External Site ID and USGS service is available."
-        )
-    return result
+    """Get hourly averaged water quality readings for a specific station."""
+    return station_service.get_aggregated_readings(db, station_id=station_id, period_hours=period)

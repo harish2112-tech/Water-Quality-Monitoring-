@@ -32,9 +32,7 @@ def create_station(db: Session, data: StationCreate) -> WaterStation:
         temperature=data.temperature,
         lead=data.lead,
         arsenic=data.arsenic,
-        status=data.status,
-        external_site_id=data.external_site_id,
-        data_source=data.data_source or "internal"
+        status=data.status
     )
     db.add(station)
     db.commit()
@@ -72,3 +70,37 @@ def delete_station(db: Session, station_id: int) -> bool:
     db.delete(station)
     db.commit()
     return True
+from datetime import datetime, timedelta
+from sqlalchemy import func
+from app.models.reading import WaterReading
+
+def get_aggregated_readings(db: Session, station_id: int, period_hours: int = 24) -> List[dict]:
+    """
+    Get hourly averaged readings for a station over a specified period.
+    Returns a list of dicts suitable for AggregateReadingResponse.
+    """
+    start_time = datetime.utcnow() - timedelta(hours=period_hours)
+    
+    # 1. Group by hour and parameter
+    results = (
+        db.query(
+            func.date_trunc('hour', WaterReading.recorded_at).label('hour'),
+            WaterReading.parameter,
+            func.avg(WaterReading.value).label('avg_value')
+        )
+        .filter(WaterReading.station_id == station_id)
+        .filter(WaterReading.recorded_at >= start_time)
+        .group_by(func.date_trunc('hour', WaterReading.recorded_at), WaterReading.parameter)
+        .order_by(func.date_trunc('hour', WaterReading.recorded_at).asc())
+        .all()
+    )
+    
+    # 2. Pivot results: {timestamp: {param1: val1, param2: val2}}
+    pivoted = {}
+    for hour, param, avg_val in results:
+        if hour not in pivoted:
+            pivoted[hour] = {"timestamp": hour}
+        pivoted[hour][param.value if hasattr(param, 'value') else str(param)] = round(avg_val, 2)
+        
+    # Return sorted list
+    return sorted(pivoted.values(), key=lambda x: x["timestamp"])

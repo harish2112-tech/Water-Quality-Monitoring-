@@ -33,7 +33,23 @@ class ReadingResponse(BaseModel):
     value: float
     recorded_at: datetime
     is_safe: bool
-    data_source: str # sensor, manual, usgs
+
+    class Config:
+        from_attributes = True
+
+
+class AggregateReadingResponse(BaseModel):
+    """Schema for hourly averaged station readings."""
+    timestamp: datetime
+    ph: Optional[float] = None
+    turbidity: Optional[float] = None
+    dissolved_oxygen: Optional[float] = None
+    conductivity: Optional[float] = None
+    temperature: Optional[float] = None
+    nitrates: Optional[float] = None
+    coliform: Optional[float] = None
+    lead: Optional[float] = None
+    arsenic: Optional[float] = None
 
     class Config:
         from_attributes = True

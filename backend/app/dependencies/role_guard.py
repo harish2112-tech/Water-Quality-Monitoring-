@@ -1,18 +1,23 @@
-from typing import List, Callable
 from fastapi import Depends, HTTPException, status
-from app.models.user import User, UserRole
 from app.services.auth import get_current_user
+from app.models.user import User, UserRole
 
-def require_role(allowed_roles: List[UserRole]) -> Callable:
+def require_role(*roles: str):
     """
-    Dependency factory that returns a dependency to check if the current user 
-    has one of the allowed roles.
+    FastAPI dependency factory to check if the current user has one of the required roles.
+    
+    Usage:
+        @router.get("/ngo-only", dependencies=[Depends(require_role("ngo", "admin"))])
+        def ngo_only_endpoint():
+            ...
     """
-    def role_dependency(current_user: User = Depends(get_current_user)) -> User:
-        if current_user.role not in allowed_roles:
+    def role_dependency(current_user: User = Depends(get_current_user)):
+        # Since UserRole inherits from str, comparing against strings works.
+        # We check both the Enum object and its string value for robustness.
+        if current_user.role not in roles and current_user.role.value not in roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You do not have the required permissions to access this resource."
+                detail=f"Operation not permitted for role: {current_user.role.value}. Required: {', '.join(roles)}",
             )
         return current_user
     

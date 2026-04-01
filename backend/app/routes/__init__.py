@@ -4,3 +4,4 @@ from .stations import router as stations_router
 from .reports import router as reports_router
 from .readings import router as readings_router
 from .alerts import router as alerts_router
+from .collaborations import router as collaborations_router

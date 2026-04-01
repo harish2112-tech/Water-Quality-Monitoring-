@@ -1,14 +1,8 @@
-import sys
-import os
-# Add the current directory to sys.path so 'app' module can be found when running on Vercel
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import traceback
-import os
 
 from app.core.database import engine, Base
 from app.routes import (
@@ -18,7 +12,9 @@ from app.routes import (
     reports_router,
     readings_router,
     alerts_router,
+    collaborations_router,
 )
+from app.dependencies.role_guard import require_role
 
 # Import all models so SQLAlchemy will create the tables
 import app.models.user       # noqa: F401
@@ -26,6 +22,7 @@ import app.models.station    # noqa: F401
 import app.models.reading    # noqa: F401
 import app.models.report     # noqa: F401
 import app.models.alert      # noqa: F401
+import app.models.collaboration # noqa: F401
 
 load_dotenv()
 
@@ -34,11 +31,7 @@ app = FastAPI(title="Water Quality Monitor API", version="1.0.0")
 # ---------- CORS ----------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        os.getenv("FRONTEND_URL", ""),
-    ],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,10 +45,18 @@ def startup():
 # ---------- Routers ----------
 app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(user_router, prefix="/api")
 app.include_router(stations_router)
+app.include_router(stations_router, prefix="/api")
 app.include_router(reports_router)
 app.include_router(readings_router)
 app.include_router(alerts_router)
+app.include_router(collaborations_router, dependencies=[Depends(require_role("ngo", "admin"))])
+
+# Versioned API support
+app.include_router(reports_router, prefix="/v1")
+app.include_router(alerts_router, prefix="/v1")
+app.include_router(stations_router, prefix="/v1")
 
 # ---------- Health ----------
 @app.get("/")

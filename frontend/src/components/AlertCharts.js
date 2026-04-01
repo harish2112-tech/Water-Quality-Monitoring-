@@ -30,9 +30,11 @@ const AlertCharts = ({ data }) => {
     // Process data for Bar Chart (Alerts by type)
     const processTypeData = () => {
         const types = {
-            boil_notice: 0,
-            contamination: 0,
-            outage: 0
+            chemical_imbalance: 0,
+            aquatic_risk: 0,
+            clarity_warning: 0,
+            ph_variance: 0,
+            wqi_breach: 0
         };
 
         data.forEach(alert => {
@@ -52,9 +54,11 @@ const AlertCharts = ({ data }) => {
     const typeData = processTypeData();
 
     const COLORS = {
-        boil_notice: '#f59e0b', // accent-gold
-        contamination: '#ef4444', // critical/red
-        outage: '#94a3b8' // primary-gray
+        chemical_imbalance: '#f59e0b',
+        aquatic_risk: '#ef4444',
+        clarity_warning: '#94a3b8',
+        ph_variance: '#10b981',
+        wqi_breach: '#ef4444'
     };
 
     return (

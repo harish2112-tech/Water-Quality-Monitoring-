@@ -1,31 +1,29 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Loader2 } from 'lucide-react';
 
 /**
- * RoleGuard component protects routes based on user roles.
- * @param {Array} allowedRoles - List of roles permitted to access the route.
+ * RoleGuard protects routes by checking the user's role.
+ * If unauthorized, redirects to /403.
  */
-const RoleGuard = ({ children, allowedRoles }) => {
+const RoleGuard = ({ children, roles }) => {
     const { user, loading } = useAuth();
-    const location = useLocation();
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-full">
-                <div className="w-8 h-8 border-4 border-accent-gold/20 border-t-accent-gold rounded-full animate-spin"></div>
+            <div className="flex h-screen w-full items-center justify-center bg-ocean-deep">
+                <Loader2 className="w-12 h-12 text-accent-gold animate-spin" />
             </div>
         );
     }
 
     if (!user) {
-        // Redir to login if not authenticated
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/login" replace />;
     }
 
-    if (!allowedRoles.includes(user.role)) {
-        // Redir to unauthorized page or home if role not permitted
-        return <Navigate to="/dashboard" replace />;
+    if (roles && !roles.includes(user.role?.toLowerCase())) {
+        return <Navigate to="/403" replace />;
     }
 
     return children;

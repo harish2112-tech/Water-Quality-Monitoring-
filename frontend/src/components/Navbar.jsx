@@ -1,8 +1,8 @@
 import React from 'react';
-import { Bell, Search, User, Menu } from 'lucide-react';
+import { Bell, Search, User } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const Navbar = ({ onToggleSidebar }) => {
+const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -18,15 +18,9 @@ const Navbar = ({ onToggleSidebar }) => {
     };
 
     return (
-        <header className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass-panel border-b border-white/5 px-4 md:px-8 flex items-center justify-between z-40 transition-all duration-300">
-            <div className="flex items-center space-x-4">
-                <button 
-                    onClick={onToggleSidebar}
-                    className="p-2 text-primary-gray hover:text-white lg:hidden"
-                >
-                    <Menu className="w-5 h-5" />
-                </button>
-                <h1 className="text-lg md:text-xl font-bold text-white tracking-wide uppercase text-glow-gold truncate">
+        <header className="fixed top-0 right-0 left-64 h-16 glass-panel border-b border-white/5 px-8 flex items-center justify-between z-40">
+            <div>
+                <h1 className="text-xl font-bold text-white tracking-wide uppercase text-glow-gold">
                     {getPageTitle()}
                 </h1>
             </div>

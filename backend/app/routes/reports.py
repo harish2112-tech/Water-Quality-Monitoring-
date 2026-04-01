@@ -31,20 +31,16 @@ def submit_report(
     return report_service.create_report(db, data, user_id=current_user.id)
 
 
-@router.patch("/{report_id}/status", response_model=ReportResponse)
+from app.dependencies.role_guard import require_role
+
+@router.patch("/{report_id}/status", response_model=ReportResponse, dependencies=[Depends(require_role("authority", "admin"))])
 def update_report_status(
     report_id: int,
     data: ReportStatusUpdate,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    """Update report status (NGO/Admin only)."""
-    if current_user.role not in ["ngo", "admin"]:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only NGO and Admin users can verify reports"
-        )
-    
+    """Update report status (Authority/Admin only)."""
     updated_report = report_service.update_report_status(
         db, 
         report_id=report_id, 
