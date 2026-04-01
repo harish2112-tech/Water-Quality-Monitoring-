@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 
-const WEBSOCKET_URL = 'ws://localhost:8000/ws/alerts';
+const WEBSOCKET_URL = process.env.REACT_APP_WS_URL || 
+    (process.env.NODE_ENV === 'production' ? 
+        (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.host + '/api/v1/ws/alerts' : 
+        'ws://localhost:8000/ws/alerts');
 
 export const useAlertSocket = (onMessageReceived) => {
     const [isConnected, setIsConnected] = useState(false);
