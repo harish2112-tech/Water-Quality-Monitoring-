@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Ensure Vercel can resolve the "app" module relative to this file
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
