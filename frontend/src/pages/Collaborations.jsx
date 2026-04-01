@@ -2,18 +2,13 @@ import React, { useState, useEffect } from 'react';
 import {
     Plus,
     Search,
-    Filter,
     Users,
     Briefcase,
     Calendar,
-    CheckCircle2,
     Clock,
-    AlertCircle,
     Building2,
     Droplet,
-    MoreVertical,
-    Trash2,
-    ExternalLink
+    Trash2
 } from 'lucide-react';
 
 import GlassCard from '../components/GlassCard';

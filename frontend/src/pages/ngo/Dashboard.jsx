@@ -6,8 +6,7 @@ import {
     Plus, 
     Search,
     Filter,
-    ArrowUpRight,
-    Loader2
+    ArrowUpRight
 } from 'lucide-react';
 import api from '../../services/api';
 import CollaborationsList from '../../components/ngo/CollaborationsList';

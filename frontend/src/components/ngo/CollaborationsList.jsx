@@ -3,7 +3,6 @@ import {
     ChevronLeft, 
     ChevronRight, 
     MoreHorizontal, 
-    FileText, 
     Calendar, 
     AtSign, 
     Building2,
@@ -18,7 +17,7 @@ const CollaborationsList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState('');
+    const [search] = useState('');
     const [selectedReports, setSelectedReports] = useState([]);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [currentStationName, setCurrentStationName] = useState('');
