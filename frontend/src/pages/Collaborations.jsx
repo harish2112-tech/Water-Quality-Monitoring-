@@ -6,14 +6,10 @@ import {
     Users,
     Briefcase,
     Calendar,
-    CheckCircle2,
     Clock,
-    AlertCircle,
     Building2,
     Droplet,
-    MoreVertical,
-    Trash2,
-    ExternalLink
+    Trash2
 } from 'lucide-react';
 
 import GlassCard from '../components/GlassCard';
@@ -33,6 +29,9 @@ const Collaborations = () => {
         contact_email: '',
         station_id: ''
     });
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('ALL');
+    const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
     const loadData = async () => {
         try {
@@ -78,6 +77,14 @@ const Collaborations = () => {
         }
     };
 
+    const filteredCollaborations = collaborations.filter(c => {
+        const matchesSearch = (c.project_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              (c.ngo_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              (c.contact_email || "").toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus = statusFilter === 'ALL' || (c.status || "").toUpperCase() === statusFilter;
+        return matchesSearch && matchesStatus;
+    });
+
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-[60vh] text-white">
             <div className="w-12 h-12 border-4 border-accent-gold/20 border-t-accent-gold rounded-full animate-spin mb-4"></div>
@@ -99,13 +106,48 @@ const Collaborations = () => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary-gray" />
+                    <div className="relative group">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary-gray group-focus-within:text-accent-gold transition-colors" />
                         <input
                             type="text"
                             placeholder="Search projects..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-accent-gold/50 transition-all w-48 md:w-64"
                         />
+                    </div>
+                    
+                    <div className="relative">
+                        <button 
+                            onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                            className={`p-2.5 border rounded-xl transition-all ${
+                                statusFilter !== 'ALL' 
+                                    ? 'bg-accent-gold/10 border-accent-gold/50 text-accent-gold' 
+                                    : 'bg-white/5 border-white/10 text-primary-gray hover:text-white'
+                            }`}
+                        >
+                            <Filter className="w-4 h-4" />
+                        </button>
+
+                        {showFilterDropdown && (
+                            <div className="absolute right-0 mt-2 w-32 bg-ocean-deep border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                                <div className="p-1 flex flex-col">
+                                    {['ALL', 'ACTIVE', 'INACTIVE'].map(status => (
+                                        <button
+                                            key={status}
+                                            onClick={() => { setStatusFilter(status); setShowFilterDropdown(false); }}
+                                            className={`text-left px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors ${
+                                                statusFilter === status 
+                                                    ? 'bg-accent-gold/20 text-accent-gold' 
+                                                    : 'text-primary-gray hover:bg-white/5 hover:text-white'
+                                            }`}
+                                        >
+                                            {status}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                     {user?.role === 'ngo' && (
                         <button
@@ -127,7 +169,7 @@ const Collaborations = () => {
                     </div>
                     <div>
                         <p className="text-[10px] text-primary-gray uppercase font-black tracking-widest">Active Initiatives</p>
-                        <h4 className="text-2xl font-black text-white">{collaborations.length}</h4>
+                        <h4 className="text-2xl font-black text-white">{filteredCollaborations.length}</h4>
                     </div>
                 </GlassCard>
                 <GlassCard className="p-6 border-white/5 flex items-center space-x-4">
@@ -156,14 +198,14 @@ const Collaborations = () => {
 
             {/* Collaborations Grid/List */}
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                {collaborations.length === 0 ? (
+                {filteredCollaborations.length === 0 ? (
                     <div className="col-span-full py-20 flex flex-col items-center justify-center opacity-20">
                         <Users className="w-24 h-24 mb-4" />
-                        <h3 className="text-2xl font-black uppercase">No Active Synergies</h3>
-                        <p className="text-sm font-medium italic">Mission currently waiting for NGO engagement.</p>
+                        <h3 className="text-2xl font-black uppercase">No Matching Missions</h3>
+                        <p className="text-sm font-medium italic">Adjust filters to broaden the scan.</p>
                     </div>
                 ) : (
-                    collaborations.map((collab) => (
+                    filteredCollaborations.map((collab) => (
                         <GlassCard key={collab.id} className="p-8 border-white/5 group hover:border-accent-gold/20 transition-all relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-accent-gold/5 rounded-full -mr-12 -mt-12 blur-2xl group-hover:bg-accent-gold/10 transition-all"></div>
                             

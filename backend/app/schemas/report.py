@@ -11,6 +11,7 @@ class ReportBase(BaseModel):
     longitude: float
     source: Optional[str] = None
     photo_url: Optional[str] = None
+    station_id: Optional[int] = None
 
 
 class ReportCreate(ReportBase):
@@ -28,6 +29,7 @@ class ReportResponse(ReportBase):
     created_at: datetime
     location: Optional[str] = None
     water_source: Optional[str] = None # Include backend column name in response
+    station_id: Optional[int] = None
 
     class Config:
         from_attributes = True

@@ -4,6 +4,7 @@ import sys
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import random
+import math
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -14,10 +15,11 @@ from app.models.station import WaterStation
 def seed_stations():
     db = SessionLocal()
     try:
-        # Clear existing stations if needed (be careful)
-        # db.query(WaterStation).delete()
+        # Check if stations exist to avoid massive duplicates on re-run
+        has_stations = db.query(WaterStation).first() is not None
         
         stations_data = [
+            # --- INDIA AUTHORITY STATIONS ---
             # --- INDIA STATIONS ---
             # Ganga River
             {"name": "Ganga – Rishikesh", "river": "Ganga", "city": "Rishikesh", "lat": 30.0869, "lng": 78.2676, "country": "India"},
@@ -75,6 +77,14 @@ def seed_stations():
             {"name": "Chambal – Kota", "river": "Chambal", "city": "Kota", "lat": 25.2138, "lng": 75.8648, "country": "India"},
             {"name": "Jhelum – Baramulla", "river": "Jhelum", "city": "Baramulla", "lat": 34.2000, "lng": 74.3400, "country": "India"},
             {"name": "Mandovi – Panaji", "river": "Mandovi", "city": "Panaji", "lat": 15.4909, "lng": 73.8278, "country": "India"},
+            
+            # --- NEW REAL-WORLD INDIA STATIONS ---
+            {"name": "Hindon – Ghaziabad", "river": "Hindon", "city": "Ghaziabad", "lat": 28.6692, "lng": 77.4538, "country": "India", "force_status": "critical"},
+            {"name": "Periyar – Eloor", "river": "Periyar", "city": "Eloor", "lat": 10.0763, "lng": 76.3005, "country": "India", "force_status": "warning"},
+            {"name": "Damodar – Dhanbad", "river": "Damodar", "city": "Dhanbad", "lat": 23.7957, "lng": 86.4304, "country": "India", "force_status": "warning"},
+            {"name": "Tungabhadra – Hosapete", "river": "Tungabhadra", "city": "Hosapete", "lat": 15.2689, "lng": 76.3909, "country": "India", "force_status": "safe"},
+            {"name": "Ganga – Munger", "river": "Ganga", "city": "Munger", "lat": 25.3748, "lng": 86.4735, "country": "India"},
+            {"name": "Ganga – Bhagalpur", "river": "Ganga", "city": "Bhagalpur", "lat": 25.2425, "lng": 87.0135, "country": "India"},
 
             # --- USA STATIONS ---
             {"name": "Hudson River Station", "river": "Hudson River", "city": "New York", "lat": 40.7128, "lng": -74.0060, "country": "USA"},
@@ -97,6 +107,27 @@ def seed_stations():
             {"name": "Snake River Station", "river": "Snake River", "city": "Idaho", "lat": 43.6150, "lng": -116.2023, "country": "USA"},
             {"name": "Arkansas River Station", "river": "Arkansas River", "city": "Arkansas", "lat": 34.7465, "lng": -92.2896, "country": "USA"},
             {"name": "Susquehanna River Station", "river": "Susquehanna River", "city": "Pennsylvania", "lat": 40.2732, "lng": -76.8867, "country": "USA"},
+            
+            # --- INTERNATIONAL STATIONS ---
+            {"name": "Thames – London", "river": "Thames", "city": "London", "lat": 51.5074, "lng": -0.1278, "country": "UK", "force_status": "safe"},
+            {"name": "Seine – Paris", "river": "Seine", "city": "Paris", "lat": 48.8566, "lng": 2.3522, "country": "France", "force_status": "warning"},
+            {"name": "Rhine – Cologne", "river": "Rhine", "city": "Cologne", "lat": 50.9375, "lng": 6.9603, "country": "Germany", "force_status": "safe"},
+            {"name": "Amazon – Manaus", "river": "Amazon", "city": "Manaus", "lat": -3.1190, "lng": -60.0217, "country": "Brazil", "force_status": "safe"},
+            {"name": "Nile – Cairo", "river": "Nile", "city": "Cairo", "lat": 30.0444, "lng": 31.2357, "country": "Egypt", "force_status": "warning"},
+            {"name": "Yangtze – Shanghai", "river": "Yangtze", "city": "Shanghai", "lat": 31.2304, "lng": 121.4737, "country": "China", "force_status": "critical"},
+            {"name": "Murray – Adelaide", "river": "Murray", "city": "Adelaide", "lat": -34.9285, "lng": 138.6007, "country": "Australia", "force_status": "safe"},
+            {"name": "Danube – Budapest", "river": "Danube", "city": "Budapest", "lat": 47.4979, "lng": 19.0402, "country": "Hungary", "force_status": "safe"},
+            {"name": "Mekong – Phnom Penh", "river": "Mekong", "city": "Phnom Penh", "lat": 11.5564, "lng": 104.9282, "country": "Cambodia"},
+            {"name": "Volga – Volgograd", "river": "Volga", "city": "Volgograd", "lat": 48.7080, "lng": 44.5133, "country": "Russia"},
+            
+            # --- NGO MANAGED STATIONS ---
+            {"name": "Bellandur Lake Watch", "river": "N/A", "city": "Bangalore", "lat": 12.9304, "lng": 77.6784, "country": "India", "force_status": "critical", "managed_by": "NGO - Bangalore Eco Watch"},
+            {"name": "Cooum Watch – Chennai", "river": "Cooum", "city": "Chennai", "lat": 13.0827, "lng": 80.2707, "country": "India", "force_status": "critical", "managed_by": "NGO - City Water Watch"},
+            {"name": "Ulhas River Watch", "river": "Ulhas", "city": "Kalyan", "lat": 19.2435, "lng": 73.1312, "country": "India", "force_status": "warning", "managed_by": "NGO - River Protectors"},
+            {"name": "Musi Clean-up Unit", "river": "Musi", "city": "Hyderabad", "lat": 17.3850, "lng": 78.4867, "country": "India", "force_status": "critical", "managed_by": "NGO - Musi Revitalization"},
+            {"name": "Save Powai Lake", "river": "N/A", "city": "Mumbai", "lat": 19.1256, "lng": 72.9031, "country": "India", "force_status": "warning", "managed_by": "NGO - Lake Warriors"},
+            {"name": "Jal Shakti – Kanpur", "river": "Ganga", "city": "Kanpur", "lat": 26.4499, "lng": 80.3319, "country": "India", "force_status": "warning", "managed_by": "NGO - Clean Water Trust"},
+            {"name": "Save The Ganges – Varanasi", "river": "Ganga", "city": "Varanasi", "lat": 25.3176, "lng": 83.0062, "country": "India", "force_status": "warning", "managed_by": "NGO - Clean Water Trust"},
             
             # --- GLOBAL SAFE STATIONS ---
             {"name": "Lake Superior", "river": "Lake Superior", "city": "Ontario/Michigan", "lat": 47.7231, "lng": -86.9407, "country": "USA/Canada", "force_safe": True},
@@ -137,8 +168,25 @@ def seed_stations():
 
         status_pool = iter(flexible_statuses)
 
+        def get_realistic_val(base, hour, variance_factor=0.05):
+            """Generates a value with a natural daily sinusoidal oscillation + small noise."""
+            # Use hour to create a wave (period 24h)
+            wave = 0.2 * math.sin(hour * 2 * math.pi / 24)
+            noise = random.uniform(-variance_factor, variance_factor)
+            return base * (1 + wave + noise)
+
         for s in stations_data:
-            assigned_status = "safe" if s.get("force_safe") else next(status_pool, "warning")
+            # Check if name exists
+            existing = db.query(WaterStation).filter_by(name=s["name"]).first()
+            if existing:
+                continue
+
+            if s.get("force_status"):
+                assigned_status = s["force_status"]
+            elif s.get("force_safe"):
+                assigned_status = "safe"
+            else:
+                assigned_status = next(status_pool, "warning")
             
             # Generate stats conforming to standard
             if assigned_status == "safe":
@@ -167,7 +215,7 @@ def seed_stations():
                 city=s.get("city"),
                 latitude=s["lat"],
                 longitude=s["lng"],
-                managed_by="Water Quality Authority",
+                managed_by=s.get("managed_by", "Water Quality Authority"),
                 wqi=wqi,
                 ph=ph,
                 turbidity=turbidity,
@@ -186,21 +234,28 @@ def seed_stations():
             
             # Seed 24 hours of historical data for charts
             for h in range(24):
-                time_point = datetime.utcnow() - timedelta(hours=h)
-                # We store them as parameters in WaterReading
+                time_point = datetime.utcnow() - timedelta(hours=23-h)
+                hour_of_day = (datetime.utcnow().hour - (23-h)) % 24
+                
+                # Use the new realistic generator for smoother curves
+                r_ph = get_realistic_val(ph, hour_of_day, 0.01)
+                r_turb = get_realistic_val(turbidity, hour_of_day, 0.05)
+                r_do = get_realistic_val(do, hour_of_day, 0.03)
+                r_temp = get_realistic_val(temp, hour_of_day, 0.02)
+
                 params = [
-                    (WaterParameter.PH, ph + random.uniform(-0.2, 0.2)),
-                    (WaterParameter.TURBIDITY, turbidity + random.uniform(-1, 1)),
-                    (WaterParameter.DISSOLVED_OXYGEN, do + random.uniform(-0.5, 0.5)),
-                    (WaterParameter.TEMPERATURE, temp + random.uniform(-1, 1))
+                    (WaterParameter.PH, r_ph),
+                    (WaterParameter.TURBIDITY, r_turb),
+                    (WaterParameter.DISSOLVED_OXYGEN, r_do),
+                    (WaterParameter.TEMPERATURE, r_temp)
                 ]
                 for p_type, p_val in params:
                     reading = WaterReading(
                         station_id=station.id,
-                        parameter=p_type,
+                        parameter=p_type.value if hasattr(p_type, 'value') else p_type,
                         value=round(p_val, 2),
                         recorded_at=time_point,
-                        is_safe=True
+                        is_safe=True # Simplified for seed
                     )
                     db.add(reading)
         

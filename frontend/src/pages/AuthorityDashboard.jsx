@@ -19,7 +19,8 @@ import {
     CartesianGrid, 
     Tooltip, 
     ResponsiveContainer,
-    ReferenceLine
+    ReferenceLine,
+    Legend
 } from 'recharts';
 import api from '../services/api';
 import GlassCard from '../components/GlassCard';
@@ -31,6 +32,23 @@ const AuthorityDashboard = () => {
     const [pendingReports, setPendingReports] = useState([]);
     const [alerts, setAlerts] = useState([]);
     const [chartData, setChartData] = useState([]);
+    
+    // Line Visibility Filter
+    const [visibleLines, setVisibleLines] = useState(["pH", "turbidity", "dissolvedOxygen", "lead", "arsenic"]);
+    
+    const lineConfigs = [
+        { key: "pH", color: "#10b981", yAxis: "left", label: "pH Level" },
+        { key: "turbidity", color: "#f59e0b", yAxis: "right", label: "Turbidity" },
+        { key: "dissolvedOxygen", color: "#3b82f6", yAxis: "left", label: "Oxygen", dashed: true },
+        { key: "lead", color: "#8b5cf6", yAxis: "trace", label: "Lead Content" },
+        { key: "arsenic", color: "#ec4899", yAxis: "trace", label: "Arsenic" },
+    ];
+
+    const toggleLine = (key) => {
+        setVisibleLines(prev => 
+            prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+        );
+    };
     
     // Admin Only - User Management
     const [usersList, setUsersList] = useState([]);
@@ -203,27 +221,69 @@ const AuthorityDashboard = () => {
                         <h2 className="text-xl font-black uppercase tracking-widest text-white italic truncate">
                             30-Day Subsystem <span className="text-accent-gold">Aggregates</span>
                         </h2>
+                        
+                        {/* Line Filters */}
+                        <div className="flex flex-wrap gap-2">
+                            {lineConfigs.map(config => (
+                                <button
+                                    key={config.key}
+                                    onClick={() => toggleLine(config.key)}
+                                    className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all ${
+                                        visibleLines.includes(config.key)
+                                            ? 'bg-white/10 border-white/20 text-white'
+                                            : 'bg-transparent border-white/5 text-white/20 hover:text-white/40'
+                                    }`}
+                                    style={visibleLines.includes(config.key) ? { borderLeft: `3px solid ${config.color}` } : {}}
+                                >
+                                    {config.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                     <div className="h-96">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
                                 <XAxis dataKey="day" stroke="#666" fontSize={10} tickMargin={10} />
-                                <YAxis yAxisId="left" stroke="#10b981" fontSize={10} domain={[4, 10]} />
-                                <YAxis yAxisId="right" orientation="right" stroke="#f59e0b" fontSize={10} />
-                                <YAxis yAxisId="trace" orientation="right" stroke="#8b5cf6" fontSize={10} hide />
+                                <YAxis yAxisId="left" stroke="#10b981" fontSize={10} domain={[4, 10]} hide={!visibleLines.includes('pH') && !visibleLines.includes('dissolvedOxygen')} />
+                                <YAxis yAxisId="right" orientation="right" stroke="#f59e0b" fontSize={10} hide={!visibleLines.includes('turbidity')} />
+                                <YAxis yAxisId="trace" orientation="right" stroke="#8b5cf6" fontSize={10} hide={!visibleLines.includes('lead') && !visibleLines.includes('arsenic')} />
                                 <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#333' }} />
-                                {/* WHO Reference Baselines */}
-                                <ReferenceLine y={8.5} yAxisId="left" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: 'WHO Max pH', fill: 'red', fontSize: 9 }} />
-                                <ReferenceLine y={6.5} yAxisId="left" stroke="red" strokeDasharray="3 3" label={{ position: 'insideBottomLeft', value: 'WHO Min pH', fill: 'red', fontSize: 9 }} />
-                                <ReferenceLine y={4} yAxisId="right" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopRight', value: 'WHO Max Turbidity', fill: 'red', fontSize: 9 }} />
-                                <ReferenceLine y={0.01} yAxisId="trace" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopRight', value: 'WHO Max Arsenic', fill: 'red', fontSize: 7 }} />
                                 
-                                <Line yAxisId="left" type="monotone" dataKey="pH" stroke="#10b981" strokeWidth={3} dot={false} />
-                                <Line yAxisId="right" type="monotone" dataKey="turbidity" stroke="#f59e0b" strokeWidth={3} dot={false} />
-                                <Line yAxisId="left" type="monotone" dataKey="dissolvedOxygen" stroke="#3b82f6" strokeWidth={2} dot={false} strokeDasharray="5 5" />
-                                <Line yAxisId="trace" type="monotone" dataKey="lead" stroke="#8b5cf6" strokeWidth={2} dot={false} />
-                                <Line yAxisId="trace" type="monotone" dataKey="arsenic" stroke="#ec4899" strokeWidth={2} dot={false} />
+                                {/* WHO Reference Baselines - Only show if corresponding line is active */}
+                                {visibleLines.includes('pH') && (
+                                    <>
+                                        <ReferenceLine y={8.5} yAxisId="left" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: 'WHO Max pH', fill: 'red', fontSize: 9 }} />
+                                        <ReferenceLine y={6.5} yAxisId="left" stroke="red" strokeDasharray="3 3" label={{ position: 'insideBottomLeft', value: 'WHO Min pH', fill: 'red', fontSize: 9 }} />
+                                    </>
+                                )}
+                                {visibleLines.includes('turbidity') && (
+                                    <ReferenceLine y={4} yAxisId="right" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopRight', value: 'WHO Max Turbidity', fill: 'red', fontSize: 9 }} />
+                                )}
+                                {(visibleLines.includes('arsenic') || visibleLines.includes('lead')) && (
+                                    <ReferenceLine y={0.01} yAxisId="trace" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopRight', value: 'WHO Max Trace', fill: 'red', fontSize: 7 }} />
+                                )}
+                                
+                                {lineConfigs.map(config => (
+                                    visibleLines.includes(config.key) && (
+                                        <Line 
+                                            key={config.key}
+                                            yAxisId={config.yAxis} 
+                                            type="monotone" 
+                                            dataKey={config.key} 
+                                            stroke={config.color} 
+                                            strokeWidth={3} 
+                                            dot={false}
+                                            strokeDasharray={config.dashed ? "5 5" : "0"}
+                                        />
+                                    )
+                                ))}
+                                
+                                <Legend 
+                                    verticalAlign="top" 
+                                    height={36} 
+                                    wrapperStyle={{ fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold', paddingTop: '10px' }}
+                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>

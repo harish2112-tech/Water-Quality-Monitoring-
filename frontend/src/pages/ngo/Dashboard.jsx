@@ -6,8 +6,7 @@ import {
     Plus, 
     Search,
     Filter,
-    ArrowUpRight,
-    Loader2
+    ArrowUpRight
 } from 'lucide-react';
 import api from '../../services/api';
 import CollaborationsList from '../../components/ngo/CollaborationsList';
@@ -22,6 +21,9 @@ const Dashboard = () => {
         activeAlerts: 0
     });
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("active");
+    const [showFilterDropdown, setShowFilterDropdown] = useState(false);
     const { setShowNGOStations } = useMap();
 
     useEffect(() => {
@@ -29,7 +31,7 @@ const Dashboard = () => {
             try {
                 // In a real scenario, these would be customized for the NGO's scope
                 const [collabs, reports, alerts] = await Promise.all([
-                    api.get('/api/v1/collaborations?status=active'),
+                    api.get(`/api/v1/collaborations?status=${statusFilter === 'all' ? '' : statusFilter}`),
                     api.get('/api/v1/reports'), // area filter can be added when scope is defined
                     api.get('/api/v1/alerts')   // location filter can be added
                 ]);
@@ -48,7 +50,7 @@ const Dashboard = () => {
 
         fetchStats();
         setShowNGOStations(true); // Ensure NGO stations are visible when entering dashboard
-    }, [setShowNGOStations]);
+    }, [search, statusFilter, setShowNGOStations]);
 
     const kpiCards = [
         { label: 'Active Projects', value: stats.activeProjects, icon: Users, color: 'text-accent-gold', bg: 'bg-accent-gold/10' },
@@ -64,11 +66,38 @@ const Dashboard = () => {
                     <h1 className="text-3xl font-black text-white uppercase tracking-tight">NGO Collaboration <span className="text-accent-gold">Portal</span></h1>
                     <p className="text-primary-gray font-medium">Coordinate water quality projects and respond to community reports.</p>
                 </div>
-                <div className="flex items-center space-x-3">
-                    <button className="flex items-center space-x-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white hover:bg-white/10 transition-all">
-                        <Filter className="w-4 h-4 text-accent-gold" />
-                        <span>Filter Scope</span>
+                <div className="flex items-center space-x-3 relative">
+                    <button 
+                        onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                        className={`flex items-center space-x-2 px-4 py-2 border rounded-xl text-sm font-bold transition-all ${
+                            statusFilter !== 'all' 
+                                ? 'bg-accent-gold/10 border-accent-gold/50 text-accent-gold' 
+                                : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                        }`}
+                    >
+                        <Filter className="w-4 h-4" />
+                        <span>Filter Scope: {statusFilter.toUpperCase()}</span>
                     </button>
+
+                    {showFilterDropdown && (
+                        <div className="absolute right-0 top-full mt-2 w-48 bg-ocean-deep border border-white/10 rounded-xl shadow-2xl z-[1100] overflow-hidden animate-in fade-in slide-in-from-top-2">
+                            <div className="p-2 flex flex-col space-y-1">
+                                {['all', 'active', 'inactive'].map(status => (
+                                    <button
+                                        key={status}
+                                        onClick={() => { setStatusFilter(status); setShowFilterDropdown(false); }}
+                                        className={`text-left px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors ${
+                                            statusFilter === status 
+                                                ? 'bg-accent-gold/20 text-accent-gold' 
+                                                : 'text-primary-gray hover:bg-white/5 hover:text-white'
+                                        }`}
+                                    >
+                                        {status === 'all' ? 'Universal View' : status}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -104,11 +133,13 @@ const Dashboard = () => {
                                 <input 
                                     type="text" 
                                     placeholder="Search projects..." 
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
                                     className="pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs focus:outline-none focus:border-accent-gold/50 transition-all w-48 md:w-64"
                                 />
                             </div>
                         </div>
-                        <CollaborationsList />
+                        <CollaborationsList search={search} statusFilter={statusFilter} />
                     </div>
                 </div>
 

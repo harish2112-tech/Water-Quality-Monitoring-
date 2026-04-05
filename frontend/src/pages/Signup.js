@@ -121,7 +121,7 @@ const Signup = () => {
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean-light/30" />
                   <input
                     type="text"
-                    placeholder="John Doe"
+                    placeholder="Eren Yaeger"
                     value={formData.name}
                     onChange={set('name')}
                     required
@@ -138,7 +138,7 @@ const Signup = () => {
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean-light/30" />
                   <input
                     type="email"
-                    placeholder="john.doe@example.com"
+                    placeholder="eren@example.com"
                     value={formData.email}
                     onChange={set('email')}
                     required

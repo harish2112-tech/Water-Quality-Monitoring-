@@ -1,7 +1,30 @@
 import React from 'react';
-import { X, AlertCircle, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { X, AlertCircle, CheckCircle2, XCircle, Clock, Plus } from 'lucide-react';
+import ReportForm from '../ReportForm';
+import { collaborationService } from '../../services/collaborationService';
 
-const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
+const ReportPanel = ({ reports: initialReports, isOpen, onClose, stationName, stationId, initialCoords }) => {
+    const [showForm, setShowForm] = React.useState(false);
+    const [reports, setReports] = React.useState(initialReports);
+    const [loading, setLoading] = React.useState(false);
+
+    React.useEffect(() => {
+        setReports(initialReports);
+    }, [initialReports]);
+
+    const refreshReports = async () => {
+        if (!stationId) return;
+        setLoading(true);
+        try {
+            const updated = await collaborationService.getReportsByStation(stationId);
+            setReports(updated);
+        } catch (err) {
+            console.error("Failed to refresh reports:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (!isOpen) return null;
 
     const getStatusColor = (status) => {
@@ -35,12 +58,21 @@ const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
                         <h2 className="text-xl font-black text-white uppercase tracking-tight">Station Reports</h2>
                         <p className="text-[10px] font-bold text-accent-gold uppercase tracking-widest">{stationName || 'Linked monitoring station'}</p>
                     </div>
-                    <button 
-                        onClick={onClose}
-                        className="p-2 hover:bg-white/5 rounded-full transition-colors group"
-                    >
-                        <X className="w-6 h-6 text-primary-gray group-hover:text-white" />
-                    </button>
+                    <div className="flex items-center space-x-2">
+                        <button 
+                            onClick={() => setShowForm(true)}
+                            className="p-2 bg-accent-gold/10 hover:bg-accent-gold/20 border border-accent-gold/30 rounded-lg transition-all group/add flex items-center space-x-2"
+                        >
+                            <Plus className="w-4 h-4 text-accent-gold group-hover/add:scale-110 transition-transform" />
+                            <span className="text-[10px] font-black text-accent-gold uppercase tracking-tighter">Add Report</span>
+                        </button>
+                        <button 
+                            onClick={onClose}
+                            className="p-2 hover:bg-white/5 rounded-full transition-colors group"
+                        >
+                            <X className="w-6 h-6 text-primary-gray group-hover:text-white" />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-custom">
@@ -78,6 +110,15 @@ const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
                         ))
                     )}
                 </div>
+
+                {showForm && (
+                    <ReportForm 
+                        onClose={() => setShowForm(false)} 
+                        stationId={stationId}
+                        initialCoords={initialCoords}
+                        onSuccess={refreshReports}
+                    />
+                )}
 
                 <div className="p-6 border-t border-white/10 bg-white/[0.01]">
                     <button 

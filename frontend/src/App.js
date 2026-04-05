@@ -25,13 +25,10 @@ import Navbar from "./components/Navbar";
 import { MainBackground } from "./components/Background/MainBackground";
 import Collaborations from "./pages/Collaborations";
 import UserManagement from "./pages/admin/UserManagement";
+import Support from "./pages/Support";
+import Settings from "./pages/Settings";
 
-// Placeholder component for missing features
-const Placeholder = ({ name }) => (
-  <div className="flex items-center justify-center h-full text-primary-gray italic">
-    {name} page coming soon...
-  </div>
-);
+
 
 const AppLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -132,8 +129,8 @@ function App() {
             <Route path="/403" element={<AppLayout><Forbidden /></AppLayout>} />
 
             <Route path="/collaborations" element={<ProtectedPage><Collaborations /></ProtectedPage>} />
-            <Route path="/settings" element={<ProtectedPage><Placeholder name="Settings" /></ProtectedPage>} />
-            <Route path="/support" element={<ProtectedPage><Placeholder name="Support" /></ProtectedPage>} />
+            <Route path="/settings" element={<ProtectedPage><Settings /></ProtectedPage>} />
+            <Route path="/support" element={<ProtectedPage><Support /></ProtectedPage>} />
 
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

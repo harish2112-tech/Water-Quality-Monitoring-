@@ -24,6 +24,9 @@ const Reports = () => {
     const [showForm, setShowForm] = useState(false);
     const [selectedReport, setSelectedReport] = useState(null);
     const [menuOpenId, setMenuOpenId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState("ALL");
+    const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
     // Function to load reports
     const loadReports = async () => {
@@ -66,6 +69,14 @@ const Reports = () => {
         setMenuOpenId(null);
     };
 
+    const filteredReports = reports.filter((r) => {
+        const matchesSearch = (r.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              (r.description || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              (r.location || "").toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus = statusFilter === "ALL" || r.status === statusFilter;
+        return matchesSearch && matchesStatus;
+    });
+
     useEffect(() => {
         loadReports();
     }, []);
@@ -101,14 +112,48 @@ const Reports = () => {
                         <input
                             type="text"
                             placeholder="Filter registry..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-accent-gold/50 transition-all w-48 md:w-64"
                         />
 
                     </div>
 
-                    <button className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-primary-gray hover:text-white transition-colors">
-                        <Filter className="w-5 h-5" />
-                    </button>
+                    <div className="relative">
+                        <button 
+                            onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                            className={`p-2.5 border rounded-xl transition-all ${
+                                statusFilter !== 'ALL' 
+                                    ? 'bg-accent-gold/10 border-accent-gold/50 text-accent-gold shadow-[0_0_15px_rgba(234,179,8,0.2)]' 
+                                    : 'bg-white/5 border-white/10 text-primary-gray hover:text-white hover:border-white/30'
+                            }`}
+                        >
+                            <Filter className="w-5 h-5" />
+                        </button>
+
+                        {showFilterDropdown && (
+                            <div className="absolute right-0 mt-2 w-48 bg-ocean-deep border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                                <div className="p-2 border-b border-white/5 bg-white/5">
+                                    <p className="text-[10px] font-black uppercase text-primary-gray tracking-widest px-2">Moderation Status</p>
+                                </div>
+                                <div className="p-2 flex flex-col space-y-1">
+                                    {['ALL', 'PENDING', 'VERIFIED', 'REJECTED'].map(status => (
+                                        <button
+                                            key={status}
+                                            onClick={() => { setStatusFilter(status); setShowFilterDropdown(false); }}
+                                            className={`text-left px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors ${
+                                                statusFilter === status 
+                                                    ? 'bg-accent-gold/20 text-accent-gold' 
+                                                    : 'text-primary-gray hover:bg-white/5 hover:text-white'
+                                            }`}
+                                        >
+                                            {status}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
                 </div>
 
@@ -130,10 +175,6 @@ const Reports = () => {
                                 <th className="px-6 py-4 text-[10px] uppercase font-black text-primary-gray tracking-[0.2em]">
                                     Subject
                                 </th>
-{/* 
-                                <th className="px-6 py-4 text-[10px] uppercase font-black text-primary-gray tracking-[0.2em]">
-                                    Station Context
-                                </th> */}
 
                                 <th className="px-6 py-4 text-[10px] uppercase font-black text-primary-gray tracking-[0.2em]">
                                     Timestamp
@@ -160,9 +201,21 @@ const Reports = () => {
                                     </td>
                                 </tr>
 
+                            ) : reports.length === 0 ? (
+                                <tr>
+                                    <td colSpan="6" className="text-center py-12 text-primary-gray text-xs font-bold uppercase tracking-widest italic opacity-50">
+                                        No reports integrated in database yet.
+                                    </td>
+                                </tr>
+                            ) : filteredReports.length === 0 ? (
+                                <tr>
+                                    <td colSpan="6" className="text-center py-12 text-primary-gray text-xs font-bold uppercase tracking-widest italic opacity-50">
+                                        No reports match your current filter criteria.
+                                    </td>
+                                </tr>
                             ) : (
 
-                                reports.map((report) => (
+                                filteredReports.map((report) => (
 
                                     <tr key={report.id} className="hover:bg-white/5 transition-colors group">
 

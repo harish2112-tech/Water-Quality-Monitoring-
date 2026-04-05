@@ -3,7 +3,6 @@ import {
     ChevronLeft, 
     ChevronRight, 
     MoreHorizontal, 
-    FileText, 
     Calendar, 
     AtSign, 
     Building2,
@@ -18,15 +17,15 @@ import { collaborationService } from '../../services/collaborationService';
 import ReportPanel from './ReportPanel';
 import SubmitCollaborationForm from './SubmitCollaborationForm';
 
-const CollaborationsList = () => {
+const CollaborationsList = ({ search = "", statusFilter = "active" }) => {
     const [collaborations, setCollaborations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState('');
     const [selectedReports, setSelectedReports] = useState([]);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [currentStationName, setCurrentStationName] = useState('');
+    const [currentCoords, setCurrentCoords] = useState(null);
     const [openMenuId, setOpenMenuId] = useState(null);
     const [editingCollab, setEditingCollab] = useState(null);
 
@@ -94,7 +93,8 @@ const CollaborationsList = () => {
             const data = await collaborationService.getAll({ 
                 page, 
                 limit: 10,
-                project_name: search 
+                search,
+                status: statusFilter === 'all' ? null : statusFilter
             });
             setCollaborations(data);
         } catch (err) {
@@ -103,19 +103,20 @@ const CollaborationsList = () => {
         } finally {
             setLoading(false);
         }
-    }, [page, search]);
+    }, [page, search, statusFilter]);
 
     useEffect(() => {
         fetchCollaborations();
     }, [fetchCollaborations]);
 
-    const handleViewReports = async (stationId, stationName) => {
+    const handleViewReports = async (stationId, stationName, latitude = null, longitude = null) => {
         setLoading(true);
         try {
             // stationId might be null if not linked
             const reports = stationId ? await collaborationService.getReportsByStation(stationId) : [];
             setSelectedReports(reports);
             setCurrentStationName(stationName);
+            setCurrentCoords(latitude && longitude ? { latitude, longitude } : null);
             setIsPanelOpen(true);
         } catch (err) {
             console.error("Failed to fetch reports:", err);
@@ -193,7 +194,7 @@ const CollaborationsList = () => {
                                     </td>
                                     <td className="px-6 py-6 text-center">
                                         <button 
-                                            onClick={() => handleViewReports(collab.station_id, collab.project_name)}
+                                            onClick={() => handleViewReports(collab.station_id, collab.project_name, collab.latitude, collab.longitude)}
                                             className="px-4 py-1.5 bg-safe/10 border border-safe/20 rounded-lg text-safe text-[10px] font-black uppercase tracking-widest hover:bg-safe/20 transition-all active:scale-95"
                                         >
                                             View Reports
@@ -282,6 +283,8 @@ const CollaborationsList = () => {
             <ReportPanel 
                 reports={selectedReports}
                 stationName={currentStationName}
+                stationId={collaborations.find(c => c.project_name === currentStationName)?.station_id}
+                initialCoords={currentCoords}
                 isOpen={isPanelOpen}
                 onClose={() => setIsPanelOpen(false)}
             />

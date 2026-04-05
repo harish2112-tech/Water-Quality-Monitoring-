@@ -2,16 +2,21 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from app.models.reading import WaterReading
 
-WHO_THRESHOLDS = {
-    "ph_low": 6.5,
-    "ph_high": 8.5,
-    "turbidity": 4,
-    "do": 6,
-    "lead": 0.01,
-    "arsenic": 0.01
-}
+from app.models.settings import SystemThreshold
 
 def analyse_station(station_id: int, db: Session):
+    # Fetch dynamic thresholds from DB
+    db_thresholds = {t.parameter: t.critical_value for t in db.query(SystemThreshold).all()}
+    
+    # Fallback to WHO if DB is empty
+    WHO_THRESHOLDS = {
+        "ph_low": db_thresholds.get("ph_low", 6.5),
+        "ph_high": db_thresholds.get("ph_high", 8.5),
+        "turbidity": db_thresholds.get("turbidity", 4.0),
+        "do": db_thresholds.get("do", 6.0),
+        "lead": db_thresholds.get("lead", 0.01),
+        "arsenic": db_thresholds.get("arsenic", 0.01)
+    }
     alerts = []
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
 
@@ -39,6 +44,8 @@ def analyse_station(station_id: int, db: Session):
         last3 = values[-3:]
 
         threshold = WHO_THRESHOLDS.get(param)
+        if threshold is None:
+            continue
 
         # BREACH rule
         if param == "do":

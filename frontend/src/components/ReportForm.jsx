@@ -11,7 +11,7 @@ import GlassCard from './GlassCard';
 import MapSelectModal from './MapSelectModal';
 import { reportService } from '../services/reportService';
 
-const ReportForm = ({ onClose }) => {
+const ReportForm = ({ onClose, stationId, initialCoords, onSuccess }) => {
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -19,10 +19,11 @@ const ReportForm = ({ onClose }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        latitude: '22.5076',
-        longitude: '88.3639',
+        latitude: initialCoords?.latitude || '22.5076',
+        longitude: initialCoords?.longitude || '88.3639',
         source: '',
-        photo: null
+        photo: null,
+        station_id: stationId || null
     });
 
     const [preview, setPreview] = useState(null);
@@ -74,6 +75,8 @@ const ReportForm = ({ onClose }) => {
         try {
             await reportService.submit(formData);
             setSuccess(true);
+
+            if (onSuccess) onSuccess();
 
             setTimeout(() => {
                 onClose();

@@ -17,6 +17,7 @@ router = APIRouter(
 @router.get("", response_model=List[CollaborationResponse])
 def list_collaborations(
     status: Optional[str] = None,
+    search: Optional[str] = None,
     page: int = 1,
     limit: int = 10,
     db: Session = Depends(get_db),
@@ -24,7 +25,7 @@ def list_collaborations(
 ):
     """List all NGO collaboration projects for the authenticated NGO."""
     skip = (page - 1) * limit
-    return collaboration_service.get_collaborations(db, ngo_user_id=current_user.id, status=status, skip=skip, limit=limit)
+    return collaboration_service.get_collaborations(db, ngo_user_id=current_user.id, status=status, search=search, skip=skip, limit=limit)
 
 @router.post("", response_model=CollaborationResponse, status_code=status.HTTP_201_CREATED)
 def create_collaboration(

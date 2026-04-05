@@ -13,6 +13,7 @@ class Report(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    station_id = Column(Integer, ForeignKey("water_stations.id"), nullable=True) # Linked station
     location = Column(String, nullable=True)
     description = Column(String, nullable=False)
     latitude = Column(Float, nullable=False)

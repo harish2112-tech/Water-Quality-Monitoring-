@@ -10,7 +10,6 @@ import {
     ChevronRight,
     Eye,
     EyeOff,
-    User,
     Shield,
     Camera
 } from 'lucide-react';

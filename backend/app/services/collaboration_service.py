@@ -5,12 +5,29 @@ from app.models.station import WaterStation
 from app.schemas.collaboration import CollaborationCreate, CollaborationUpdate
 from fastapi import HTTPException, status
 
-def get_collaborations(db: Session, ngo_user_id: int, status: Optional[str] = None, skip: int = 0, limit: int = 100) -> List[Collaboration]:
-    """Get collaborations for a specific NGO user with optional status filter."""
+def get_collaborations(db: Session, ngo_user_id: int, status: Optional[str] = None, search: Optional[str] = None, skip: int = 0, limit: int = 100) -> List[Collaboration]:
+    """Get collaborations for a specific NGO user with optional status and search filter."""
     query = db.query(Collaboration).filter(Collaboration.ngo_user_id == ngo_user_id)
     if status:
         query = query.filter(Collaboration.status == status)
-    return query.order_by(Collaboration.created_at.desc()).offset(skip).limit(limit).all()
+    if search:
+        search_filter = f"%{search}%"
+        query = query.filter(
+            (Collaboration.project_name.ilike(search_filter)) | 
+            (Collaboration.ngo_name.ilike(search_filter))
+        )
+    # Explicitly join with station to get coordinates if needed for Response mapping
+    # Or just fetch all and use the station_id later
+    results = query.order_by(Collaboration.created_at.desc()).offset(skip).limit(limit).all()
+    
+    # We populate the latitude/longitude from the station if station_id exists
+    for collab in results:
+        if collab.station_id:
+            station = db.query(WaterStation).filter(WaterStation.id == collab.station_id).first()
+            if station:
+                collab.latitude = station.latitude
+                collab.longitude = station.longitude
+    return results
 
 def get_collaboration_by_id(db: Session, collaboration_id: int, ngo_user_id: int) -> Optional[Collaboration]:
     """Get a specific collaboration by ID, ensuring ownership."""

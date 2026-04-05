@@ -13,6 +13,8 @@ from app.routes import (
     readings_router,
     alerts_router,
     collaborations_router,
+    support_router,
+    settings_router,
 )
 from app.dependencies.role_guard import require_role
 from app.api import alerts, readings, websocket
@@ -25,6 +27,7 @@ import app.models.reading    # noqa: F401
 import app.models.report     # noqa: F401
 import app.models.alert      # noqa: F401
 import app.models.collaboration # noqa: F401
+import app.models.settings      # noqa: F401
 
 load_dotenv()
 
@@ -54,6 +57,8 @@ app.include_router(reports_router)
 app.include_router(readings_router)
 app.include_router(alerts_router)
 app.include_router(collaborations_router, dependencies=[Depends(require_role("ngo", "admin"))])
+app.include_router(support_router)
+app.include_router(settings_router)
 
 # Versioned API support
 app.include_router(reports_router, prefix="/v1")
