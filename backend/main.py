@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-=======
-import sys
-import os
-
-# Ensure Vercel can resolve the "app" module relative to this file
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,17 +13,12 @@ from app.routes import (
     readings_router,
     alerts_router,
     collaborations_router,
-<<<<<<< HEAD
     support_router,
     settings_router,
 )
 from app.dependencies.role_guard import require_role
 from app.api import alerts, readings, websocket
 
-=======
-)
-from app.dependencies.role_guard import require_role
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 # Import all models so SQLAlchemy will create the tables
 import app.models.user       # noqa: F401
@@ -41,10 +27,7 @@ import app.models.reading    # noqa: F401
 import app.models.report     # noqa: F401
 import app.models.alert      # noqa: F401
 import app.models.collaboration # noqa: F401
-<<<<<<< HEAD
 import app.models.settings      # noqa: F401
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 load_dotenv()
 
@@ -74,24 +57,18 @@ app.include_router(reports_router)
 app.include_router(readings_router)
 app.include_router(alerts_router)
 app.include_router(collaborations_router, dependencies=[Depends(require_role("ngo", "admin"))])
-<<<<<<< HEAD
 app.include_router(support_router)
 app.include_router(settings_router)
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 # Versioned API support
 app.include_router(reports_router, prefix="/v1")
 app.include_router(alerts_router, prefix="/v1")
 app.include_router(stations_router, prefix="/v1")
 
-<<<<<<< HEAD
 app.include_router(alerts.router, prefix="/api/v1/alerts")
 app.include_router(readings.router, prefix="/api/v1")
 app.include_router(websocket.router, prefix="/api/v1")
 
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 # ---------- Health ----------
 @app.get("/")
 async def root():

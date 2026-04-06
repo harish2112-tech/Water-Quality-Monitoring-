@@ -13,7 +13,6 @@ import api from '../../services/api';
 import { collaborationService } from '../../services/collaborationService';
 import { useAuth } from '../../context/AuthContext';
 
-<<<<<<< HEAD
 const SubmitCollaborationForm = ({ onSuccess, initialData = null, isEdit = false, onCancel = null }) => {
     const { user } = useAuth();
     const [formData, setFormData] = useState({
@@ -21,15 +20,6 @@ const SubmitCollaborationForm = ({ onSuccess, initialData = null, isEdit = false
         ngo_name: initialData?.ngo_name || user?.name || '',
         contact_email: initialData?.contact_email || user?.email || '',
         station_id: initialData?.station_id || ''
-=======
-const SubmitCollaborationForm = ({ onSuccess }) => {
-    const { user } = useAuth();
-    const [formData, setFormData] = useState({
-        project_name: '',
-        ngo_name: user?.name || '',
-        contact_email: user?.email || '',
-        station_id: ''
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     });
     const [stations, setStations] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -64,7 +54,6 @@ const SubmitCollaborationForm = ({ onSuccess }) => {
                 ...formData,
                 station_id: formData.station_id ? parseInt(formData.station_id) : null
             };
-<<<<<<< HEAD
             if (isEdit) {
                 await collaborationService.update(initialData.id, payload);
                 setStatus({ type: 'success', message: 'Collaboration project updated successfully!' });
@@ -78,16 +67,6 @@ const SubmitCollaborationForm = ({ onSuccess }) => {
                     station_id: ''
                 });
             }
-=======
-            await collaborationService.create(payload);
-            setStatus({ type: 'success', message: 'Collaboration project submitted successfully!' });
-            setFormData({
-                project_name: '',
-                ngo_name: user?.name || '',
-                contact_email: user?.email || '',
-                station_id: ''
-            });
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
             if (onSuccess) onSuccess();
             // Refresh page or list (handled by parent usually, but we'll use a timeout to clear success)
             setTimeout(() => setStatus({ type: '', message: '' }), 5000);
@@ -163,20 +142,12 @@ const SubmitCollaborationForm = ({ onSuccess }) => {
                         name="station_id"
                         value={formData.station_id}
                         onChange={handleChange}
-<<<<<<< HEAD
                         style={{ colorScheme: 'dark' }}
                         className="w-full bg-[#0a0e1a] border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-sm focus:outline-none focus:border-accent-gold/40 focus:ring-1 focus:ring-accent-gold/20 transition-all text-white font-medium appearance-none"
                     >
                         <option value="" className="bg-background hover:bg-white/10 dark:text-white">Unlinked / New Area</option>
                         {stations.map(s => (
                             <option key={s.id} value={s.id} className="bg-background hover:bg-white/10 dark:text-white">{s.name} ({s.city})</option>
-=======
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-sm focus:outline-none focus:border-accent-gold/40 focus:ring-1 focus:ring-accent-gold/20 transition-all text-white font-medium appearance-none"
-                    >
-                        <option value="" className="bg-ocean-deep">Unlinked / New Area</option>
-                        {stations.map(s => (
-                            <option key={s.id} value={s.id} className="bg-ocean-deep">{s.name} ({s.city})</option>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                         ))}
                     </select>
                 </div>
@@ -192,7 +163,6 @@ const SubmitCollaborationForm = ({ onSuccess }) => {
                 </div>
             )}
 
-<<<<<<< HEAD
             {/* Action Buttons */}
             <div className={`flex ${isEdit ? 'space-x-4' : ''}`}>
                 {isEdit && onCancel && (
@@ -224,26 +194,6 @@ const SubmitCollaborationForm = ({ onSuccess }) => {
                 </button>
             </div>
             <div className="h-4"></div> {/* Spacer to prevent bottom cutoff in flex-overflow containers */}
-=======
-            {/* Submit Button */}
-            <button 
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 bg-accent-gold hover:bg-yellow-500 text-background font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-accent-gold/20 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-            >
-                {loading ? (
-                    <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Processing Deployment...</span>
-                    </>
-                ) : (
-                    <>
-                        <Send className="w-4 h-4" />
-                        <span>Deploy Project</span>
-                    </>
-                )}
-            </button>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
         </form>
     );
 };

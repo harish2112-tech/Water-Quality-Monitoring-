@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
     Plus,
     Search,
-<<<<<<< HEAD
     Filter,
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     Users,
     Briefcase,
     Calendar,
@@ -32,12 +29,9 @@ const Collaborations = () => {
         contact_email: '',
         station_id: ''
     });
-<<<<<<< HEAD
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('ALL');
     const [showFilterDropdown, setShowFilterDropdown] = useState(false);
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
     const loadData = async () => {
         try {
@@ -83,7 +77,6 @@ const Collaborations = () => {
         }
     };
 
-<<<<<<< HEAD
     const filteredCollaborations = collaborations.filter(c => {
         const matchesSearch = (c.project_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
                               (c.ngo_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,8 +85,6 @@ const Collaborations = () => {
         return matchesSearch && matchesStatus;
     });
 
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-[60vh] text-white">
             <div className="w-12 h-12 border-4 border-accent-gold/20 border-t-accent-gold rounded-full animate-spin mb-4"></div>
@@ -106,11 +97,7 @@ const Collaborations = () => {
             {/* Header section */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-white/5">
                 <div>
-<<<<<<< HEAD
                     <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tighter italic">
-=======
-                    <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                         Strategic <span className="text-accent-gold">Collaborations</span>
                     </h2>
                     <p className="text-primary-gray text-xs mt-2 font-medium tracking-wide uppercase">
@@ -118,7 +105,6 @@ const Collaborations = () => {
                     </p>
                 </div>
 
-<<<<<<< HEAD
                 <div className="flex flex-wrap items-center gap-3">
                     <div className="relative group">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary-gray group-focus-within:text-accent-gold transition-colors" />
@@ -163,17 +149,6 @@ const Collaborations = () => {
                             </div>
                         )}
                     </div>
-=======
-                <div className="flex items-center space-x-3">
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary-gray" />
-                        <input
-                            type="text"
-                            placeholder="Search projects..."
-                            className="bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-accent-gold/50 transition-all w-48 md:w-64"
-                        />
-                    </div>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     {user?.role === 'ngo' && (
                         <button
                             onClick={() => setShowForm(true)}
@@ -194,11 +169,7 @@ const Collaborations = () => {
                     </div>
                     <div>
                         <p className="text-[10px] text-primary-gray uppercase font-black tracking-widest">Active Initiatives</p>
-<<<<<<< HEAD
                         <h4 className="text-2xl font-black text-white">{filteredCollaborations.length}</h4>
-=======
-                        <h4 className="text-2xl font-black text-white">{collaborations.length}</h4>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     </div>
                 </GlassCard>
                 <GlassCard className="p-6 border-white/5 flex items-center space-x-4">
@@ -227,7 +198,6 @@ const Collaborations = () => {
 
             {/* Collaborations Grid/List */}
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-<<<<<<< HEAD
                 {filteredCollaborations.length === 0 ? (
                     <div className="col-span-full py-20 flex flex-col items-center justify-center opacity-20">
                         <Users className="w-24 h-24 mb-4" />
@@ -236,16 +206,6 @@ const Collaborations = () => {
                     </div>
                 ) : (
                     filteredCollaborations.map((collab) => (
-=======
-                {collaborations.length === 0 ? (
-                    <div className="col-span-full py-20 flex flex-col items-center justify-center opacity-20">
-                        <Users className="w-24 h-24 mb-4" />
-                        <h3 className="text-2xl font-black uppercase">No Active Synergies</h3>
-                        <p className="text-sm font-medium italic">Mission currently waiting for NGO engagement.</p>
-                    </div>
-                ) : (
-                    collaborations.map((collab) => (
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                         <GlassCard key={collab.id} className="p-8 border-white/5 group hover:border-accent-gold/20 transition-all relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-accent-gold/5 rounded-full -mr-12 -mt-12 blur-2xl group-hover:bg-accent-gold/10 transition-all"></div>
                             
@@ -339,11 +299,7 @@ const Collaborations = () => {
                         </div>
 
                         <form onSubmit={handleCreate} className="space-y-6">
-<<<<<<< HEAD
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-=======
-                            <div className="grid grid-cols-2 gap-6">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                                 <div className="space-y-2">
                                     <label className="text-[10px] text-accent-gold uppercase font-black tracking-[0.2em] ml-1">Project Code Name</label>
                                     <input

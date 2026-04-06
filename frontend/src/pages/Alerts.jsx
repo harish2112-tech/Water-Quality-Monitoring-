@@ -49,17 +49,10 @@ const Alerts = () => {
     });
 
     return (
-<<<<<<< HEAD
         <div className="space-y-6 animate-in fade-in duration-700">
             {/* Page Header */}
             <div>
                 <h1 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tighter italic">
-=======
-        <div className="p-6 space-y-6 animate-in fade-in duration-700">
-            {/* Page Header */}
-            <div>
-                <h1 className="text-4xl font-black text-white uppercase tracking-tighter italic">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     Water <span className="text-accent-gold">Alerts</span>
                 </h1>
                 <p className="text-primary-gray mt-1 text-sm font-medium tracking-wide">

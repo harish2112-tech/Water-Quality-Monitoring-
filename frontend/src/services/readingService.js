@@ -11,11 +11,7 @@ export const readingService = {
 
   /** Get aggregated hourly readings for a station */
   getAggregate: (stationId, periodHours = 24) =>
-<<<<<<< HEAD
     api.get(`/api/stations/readings/aggregate`, { 
-=======
-    api.get(`/api/v1/stations/readings/aggregate`, { 
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
       params: { station_id: stationId, period: periodHours } 
     }).then(r => r.data),
 };

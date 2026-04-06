@@ -53,18 +53,11 @@ const StationMap = ({ stations }) => {
                     }
                 `}
             </style>
-<<<<<<< HEAD
             <MapContainer center={center} zoom={5} minZoom={3} maxBounds={[[-90, -180], [90, 180]]} maxBoundsViscosity={1.0} style={{ height: '100%', width: '100%', background: '#0f172a' }}>
                 <TileLayer
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                     noWrap={true}
-=======
-            <MapContainer center={center} zoom={5} style={{ height: '100%', width: '100%', background: '#0f172a' }}>
-                <TileLayer
-                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 />
                 {stations.map((station) => (
                     <Marker

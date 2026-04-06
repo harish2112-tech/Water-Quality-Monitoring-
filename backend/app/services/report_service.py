@@ -98,11 +98,7 @@ def create_reading(db: Session, data: ReadingCreate) -> WaterReading:
 
 from sqlalchemy import or_
 
-<<<<<<< HEAD
 def get_reports(db: Session, user=None, station_id: Optional[int] = None, skip: int = 0, limit: int = 200) -> List[Report]:
-=======
-def get_reports(db: Session, user=None, skip: int = 0, limit: int = 200) -> List[Report]:
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     """
     Return citizen reports ordered by most recent first.
     Filters:
@@ -114,12 +110,9 @@ def get_reports(db: Session, user=None, skip: int = 0, limit: int = 200) -> List
     if user and user.role not in ["ngo", "admin", "authority"]:
         query = query.filter(or_(Report.user_id == user.id, Report.status == "VERIFIED"))
         
-<<<<<<< HEAD
     if station_id:
         query = query.filter(Report.station_id == station_id)
         
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     return (
         query.order_by(Report.created_at.desc())
         .offset(skip)
@@ -138,10 +131,7 @@ def create_report(db: Session, data: ReportCreate, user_id: int) -> Report:
         longitude=data.longitude,
         water_source=data.source, # Map frontend 'source' to backend 'water_source'
         photo_url=data.photo_url,
-<<<<<<< HEAD
         station_id=data.station_id,
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     )
     db.add(report)
     db.commit()

@@ -47,20 +47,14 @@ const BaseMapView = () => {
                     zoom={stations.length > 0 ? 4 : 5}
                     className="h-full w-full"
                     zoomControl={false}
-<<<<<<< HEAD
                     minZoom={3}
                     maxBounds={[[-90, -180], [90, 180]]}
                     maxBoundsViscosity={1.0}
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 >
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-<<<<<<< HEAD
                         noWrap={true}
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     />
                     <ZoomControl position="bottomleft" />
 

@@ -7,7 +7,6 @@ import {
     AtSign, 
     Building2,
     Loader2,
-<<<<<<< HEAD
     AlertCircle,
     Edit2,
     Download,
@@ -19,19 +18,10 @@ import ReportPanel from './ReportPanel';
 import SubmitCollaborationForm from './SubmitCollaborationForm';
 
 const CollaborationsList = ({ search = "", statusFilter = "active" }) => {
-=======
-    AlertCircle
-} from 'lucide-react';
-import { collaborationService } from '../../services/collaborationService';
-import ReportPanel from './ReportPanel';
-
-const CollaborationsList = () => {
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     const [collaborations, setCollaborations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
-<<<<<<< HEAD
     const [selectedReports, setSelectedReports] = useState([]);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [currentStationName, setCurrentStationName] = useState('');
@@ -96,12 +86,6 @@ const CollaborationsList = () => {
             }
         }
     };
-=======
-    const [search] = useState('');
-    const [selectedReports, setSelectedReports] = useState([]);
-    const [isPanelOpen, setIsPanelOpen] = useState(false);
-    const [currentStationName, setCurrentStationName] = useState('');
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
     const fetchCollaborations = useCallback(async () => {
         setLoading(true);
@@ -109,12 +93,8 @@ const CollaborationsList = () => {
             const data = await collaborationService.getAll({ 
                 page, 
                 limit: 10,
-<<<<<<< HEAD
                 search,
                 status: statusFilter === 'all' ? null : statusFilter
-=======
-                project_name: search 
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
             });
             setCollaborations(data);
         } catch (err) {
@@ -123,31 +103,20 @@ const CollaborationsList = () => {
         } finally {
             setLoading(false);
         }
-<<<<<<< HEAD
     }, [page, search, statusFilter]);
-=======
-    }, [page, search]);
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
     useEffect(() => {
         fetchCollaborations();
     }, [fetchCollaborations]);
 
-<<<<<<< HEAD
     const handleViewReports = async (stationId, stationName, latitude = null, longitude = null) => {
-=======
-    const handleViewReports = async (stationId, stationName) => {
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
         setLoading(true);
         try {
             // stationId might be null if not linked
             const reports = stationId ? await collaborationService.getReportsByStation(stationId) : [];
             setSelectedReports(reports);
             setCurrentStationName(stationName);
-<<<<<<< HEAD
             setCurrentCoords(latitude && longitude ? { latitude, longitude } : null);
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
             setIsPanelOpen(true);
         } catch (err) {
             console.error("Failed to fetch reports:", err);
@@ -172,13 +141,8 @@ const CollaborationsList = () => {
     }
 
     return (
-<<<<<<< HEAD
         <div className="w-full overflow-visible pb-32">
             <div className="w-full">
-=======
-        <div className="w-full">
-            <div className="overflow-x-auto scrollbar-hide">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="border-b border-white/5 bg-white/[0.01]">
@@ -230,11 +194,7 @@ const CollaborationsList = () => {
                                     </td>
                                     <td className="px-6 py-6 text-center">
                                         <button 
-<<<<<<< HEAD
                                             onClick={() => handleViewReports(collab.station_id, collab.project_name, collab.latitude, collab.longitude)}
-=======
-                                            onClick={() => handleViewReports(collab.station_id, collab.project_name)}
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                                             className="px-4 py-1.5 bg-safe/10 border border-safe/20 rounded-lg text-safe text-[10px] font-black uppercase tracking-widest hover:bg-safe/20 transition-all active:scale-95"
                                         >
                                             View Reports
@@ -247,7 +207,6 @@ const CollaborationsList = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-6 text-right">
-<<<<<<< HEAD
                                         <div className="relative inline-block text-left">
                                             <button 
                                                 onClick={() => toggleMenu(collab.id)}
@@ -285,11 +244,6 @@ const CollaborationsList = () => {
                                                 </div>
                                             )}
                                         </div>
-=======
-                                        <button className="p-2 hover:bg-white/5 rounded-lg transition-colors group">
-                                            <MoreHorizontal className="w-5 h-5 text-primary-gray group-hover:text-white" />
-                                        </button>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                                     </td>
                                 </tr>
                             ))
@@ -329,7 +283,6 @@ const CollaborationsList = () => {
             <ReportPanel 
                 reports={selectedReports}
                 stationName={currentStationName}
-<<<<<<< HEAD
                 stationId={collaborations.find(c => c.project_name === currentStationName)?.station_id}
                 initialCoords={currentCoords}
                 isOpen={isPanelOpen}
@@ -361,11 +314,6 @@ const CollaborationsList = () => {
                     </div>
                 </div>
             )}
-=======
-                isOpen={isPanelOpen}
-                onClose={() => setIsPanelOpen(false)}
-            />
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
         </div>
     );
 };

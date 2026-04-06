@@ -1,5 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
 import { X, AlertCircle, CheckCircle2, XCircle, Clock, Plus } from 'lucide-react';
 import ReportForm from '../ReportForm';
 import { collaborationService } from '../../services/collaborationService';
@@ -26,11 +25,6 @@ const ReportPanel = ({ reports: initialReports, isOpen, onClose, stationName, st
         }
     };
 
-=======
-import { X, AlertCircle, CheckCircle2, XCircle, Clock } from 'lucide-react';
-
-const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     if (!isOpen) return null;
 
     const getStatusColor = (status) => {
@@ -64,7 +58,6 @@ const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
                         <h2 className="text-xl font-black text-white uppercase tracking-tight">Station Reports</h2>
                         <p className="text-[10px] font-bold text-accent-gold uppercase tracking-widest">{stationName || 'Linked monitoring station'}</p>
                     </div>
-<<<<<<< HEAD
                     <div className="flex items-center space-x-2">
                         <button 
                             onClick={() => setShowForm(true)}
@@ -80,14 +73,6 @@ const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
                             <X className="w-6 h-6 text-primary-gray group-hover:text-white" />
                         </button>
                     </div>
-=======
-                    <button 
-                        onClick={onClose}
-                        className="p-2 hover:bg-white/5 rounded-full transition-colors group"
-                    >
-                        <X className="w-6 h-6 text-primary-gray group-hover:text-white" />
-                    </button>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-custom">
@@ -126,7 +111,6 @@ const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
                     )}
                 </div>
 
-<<<<<<< HEAD
                 {showForm && (
                     <ReportForm 
                         onClose={() => setShowForm(false)} 
@@ -136,8 +120,6 @@ const ReportPanel = ({ reports, isOpen, onClose, stationName }) => {
                     />
                 )}
 
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 <div className="p-6 border-t border-white/10 bg-white/[0.01]">
                     <button 
                         onClick={onClose}

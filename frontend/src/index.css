@@ -9,7 +9,6 @@
     @apply bg-ocean-deep text-white font-sans antialiased;
     min-height: 100vh;
     overflow-x: hidden;
-<<<<<<< HEAD
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -68,8 +67,6 @@
     outline: none;
     border-color: rgba(230, 210, 140, 0.5);
     box-shadow: 0 0 0 2px rgba(230, 210, 140, 0.1);
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
   }
 }
 

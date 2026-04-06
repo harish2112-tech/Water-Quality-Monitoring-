@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-=======
-import React from 'react';
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 import {
     TrendingUp,
     TrendingDown,
@@ -13,7 +9,6 @@ import {
 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
 import StatusBadge from '../components/StatusBadge';
-<<<<<<< HEAD
 import { alertService } from '../services/alertService';
 
 const Analytics = () => {
@@ -36,10 +31,6 @@ const Analytics = () => {
         };
         fetchPredictions();
     }, []);
-=======
-
-const Analytics = () => {
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     const metrics = [
         { label: 'pH Level', value: '7.2', trend: 'stable', change: '0.1', color: '#10b981' },
         { label: 'Turbidity', value: '4.5', trend: 'up', change: '0.8', color: '#f59e0b' },
@@ -119,7 +110,6 @@ const Analytics = () => {
                         <Activity className="w-24 h-24 text-accent-gold" />
                     </div>
                     <p className="text-[10px] text-accent-gold font-black uppercase tracking-[0.2em] mb-3">AI Prediction</p>
-<<<<<<< HEAD
                     {loadingAI ? (
                         <div className="animate-pulse space-y-2 mb-6">
                             <div className="h-4 bg-accent-gold/20 rounded w-3/4"></div>
@@ -145,36 +135,11 @@ const Analytics = () => {
                         onClick={() => navigate('/analytics/predictive')}
                         className="w-full py-3 rounded-xl bg-accent-gold text-background font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-accent-gold/20"
                     >
-=======
-                    <h5 className="text-lg font-bold text-white leading-tight mb-4">Potential Low Dissolved Oxygen Event predicted in 24–48 hours.</h5>
-                    <p className="text-xs text-primary-gray leading-relaxed mb-6">Hydrological models suggest a decrease in flow rate coupled with rising temperatures near Indus Basin.</p>
-                    <button className="w-full py-3 rounded-xl bg-accent-gold text-background font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-accent-gold/20">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                         View Full Analytics
                     </button>
                 </GlassCard>
             </div>
 
-<<<<<<< HEAD
-=======
-            {/* Bottom Nav Placeholder for Mobile - Logic in App.js but UI shown here for style */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 glass-panel border-t border-white/10 flex items-center justify-around px-6 z-50">
-                <button className="flex flex-col items-center text-accent-gold">
-                    <AlertCircle className="w-5 h-5" />
-                    <span className="text-[8px] uppercase font-bold mt-1">Alerts</span>
-                </button>
-                <button className="flex flex-col items-center text-primary-gray">
-                    <Activity className="w-5 h-5" />
-                    <span className="text-[8px] uppercase font-bold mt-1">Analytics</span>
-                </button>
-                <button className="flex flex-col items-center text-primary-gray">
-                    <div className="w-5 h-5 rounded-full bg-accent-gold/20 flex items-center justify-center">
-                        <div className="w-2 h-2 rounded-full bg-accent-gold"></div>
-                    </div>
-                    <span className="text-[8px] uppercase font-bold mt-1">Profile</span>
-                </button>
-            </div>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
         </div>
     );
 };

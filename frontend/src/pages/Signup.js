@@ -5,12 +5,8 @@ import { MainBackground } from '../components/Background/MainBackground';
 import { GlassCard } from '../components/ui/GlassCard';
 import {
   User, Mail, Lock, Droplets, ChevronDown,
-<<<<<<< HEAD
   ArrowLeft, ArrowRight, ShieldPlus, AlertCircle, Loader, CheckCircle,
   Eye, EyeOff
-=======
-  ArrowLeft, ArrowRight, ShieldPlus, AlertCircle, Loader, CheckCircle
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -21,10 +17,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     name: '', email: '', password: '', role: '', location: ''
   });
-<<<<<<< HEAD
   const [showPassword, setShowPassword] = useState(false);
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -128,11 +121,7 @@ const Signup = () => {
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean-light/30" />
                   <input
                     type="text"
-<<<<<<< HEAD
                     placeholder="Eren Yaeger"
-=======
-                    placeholder="John Doe"
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     value={formData.name}
                     onChange={set('name')}
                     required
@@ -149,11 +138,7 @@ const Signup = () => {
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean-light/30" />
                   <input
                     type="email"
-<<<<<<< HEAD
                     placeholder="eren@example.com"
-=======
-                    placeholder="john.doe@example.com"
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     value={formData.email}
                     onChange={set('email')}
                     required
@@ -169,17 +154,12 @@ const Signup = () => {
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean-light/30" />
                   <input
-<<<<<<< HEAD
                     type={showPassword ? "text" : "password"}
-=======
-                    type="password"
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     placeholder="Min. 6 characters"
                     value={formData.password}
                     onChange={set('password')}
                     required
                     disabled={loading}
-<<<<<<< HEAD
                     className="w-full bg-black/40 border border-white/10 rounded-[18px] py-3.5 pl-11 pr-11 text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-accent-gold/40"
                   />
                   <button
@@ -189,10 +169,6 @@ const Signup = () => {
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
-=======
-                    className="w-full bg-black/40 border border-white/10 rounded-[18px] py-3.5 pl-11 text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-accent-gold/40"
-                  />
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 </div>
               </div>
 

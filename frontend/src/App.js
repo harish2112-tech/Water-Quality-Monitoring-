@@ -3,10 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import RoleGuard from "./components/RoleGuard";
 import { MapProvider } from "./context/MapContext";
-<<<<<<< HEAD
 import React, { useState, useCallback } from "react";
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -16,10 +13,7 @@ import Reports from "./pages/Reports";
 import Stations from "./pages/Stations";
 import StationDetail from "./pages/StationDetail";
 import Analytics from "./pages/Analytics";
-<<<<<<< HEAD
 import PredictiveAnalytics from "./pages/PredictiveAnalytics";
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 import Alerts from "./pages/Alerts";
 import AlertDetails from "./pages/AlertDetails";
 import AlertTrends from "./pages/AlertTrends";
@@ -31,7 +25,6 @@ import Navbar from "./components/Navbar";
 import { MainBackground } from "./components/Background/MainBackground";
 import Collaborations from "./pages/Collaborations";
 import UserManagement from "./pages/admin/UserManagement";
-<<<<<<< HEAD
 import Support from "./pages/Support";
 import Settings from "./pages/Settings";
 
@@ -68,35 +61,6 @@ const Forbidden = () => (
     <button 
       onClick={() => window.history.back()}
       className="px-6 sm:px-8 py-3 bg-accent-gold text-background font-black uppercase rounded-xl hover:scale-105 transition-all shadow-xl shadow-accent-gold/20 text-sm"
-=======
-
-// Placeholder component for missing features
-const Placeholder = ({ name }) => (
-  <div className="flex items-center justify-center h-full text-primary-gray italic">
-    {name} page coming soon...
-  </div>
-);
-
-const AppLayout = ({ children }) => (
-  <div className="min-h-screen bg-ocean-deep text-white relative">
-    <MainBackground />
-    <Sidebar />
-    <Navbar />
-    <main className="pl-64 pt-16 h-screen overflow-y-auto scrollbar-custom relative z-10">
-      <div className="p-8">{children}</div>
-    </main>
-  </div>
-);
-
-// Forbidden access component
-const Forbidden = () => (
-  <div className="flex flex-col items-center justify-center p-20 space-y-4">
-    <div className="text-4xl font-black text-critical uppercase tracking-tighter shadow-lg shadow-critical/20">403 Forbidden</div>
-    <div className="text-primary-gray italic text-center max-w-md">You do not have permission to access این specialized resource. Please contact your coordinator.</div>
-    <button 
-      onClick={() => window.history.back()}
-      className="px-8 py-3 bg-accent-gold text-background font-black uppercase rounded-xl hover:scale-105 transition-all shadow-xl shadow-accent-gold/20"
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     >
       Return to Safety
     </button>
@@ -129,10 +93,7 @@ function App() {
             <Route path="/stations" element={<ProtectedPage><Stations /></ProtectedPage>} />
             <Route path="/stations/:id" element={<ProtectedPage><StationDetail /></ProtectedPage>} />
             <Route path="/analytics" element={<ProtectedPage><Analytics /></ProtectedPage>} />
-<<<<<<< HEAD
             <Route path="/analytics/predictive" element={<ProtectedPage><PredictiveAnalytics /></ProtectedPage>} />
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
             <Route path="/profile" element={<ProtectedPage><Profile /></ProtectedPage>} />
             <Route path="/alerts" element={<ProtectedPage><Alerts /></ProtectedPage>} />
             <Route path="/alerts/:id" element={<ProtectedPage><AlertDetails /></ProtectedPage>} />
@@ -168,13 +129,8 @@ function App() {
             <Route path="/403" element={<AppLayout><Forbidden /></AppLayout>} />
 
             <Route path="/collaborations" element={<ProtectedPage><Collaborations /></ProtectedPage>} />
-<<<<<<< HEAD
             <Route path="/settings" element={<ProtectedPage><Settings /></ProtectedPage>} />
             <Route path="/support" element={<ProtectedPage><Support /></ProtectedPage>} />
-=======
-            <Route path="/settings" element={<ProtectedPage><Placeholder name="Settings" /></ProtectedPage>} />
-            <Route path="/support" element={<ProtectedPage><Placeholder name="Support" /></ProtectedPage>} />
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

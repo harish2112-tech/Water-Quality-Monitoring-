@@ -28,10 +28,7 @@ class Alert(Base):
     severity = Column(String, default="warning") # warning, critical, high, low
     message = Column(Text, nullable=False)
     location = Column(String, nullable=False)
-<<<<<<< HEAD
     parameter = Column(String(50), nullable=True) # New mapping attribute
     source = Column(String(50), nullable=True)    # Source definition e.g., predictive
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     status = Column(String, default="Active") # Active, Acknowledged
     issued_at = Column(DateTime, default=datetime.utcnow)

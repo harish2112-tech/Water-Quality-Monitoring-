@@ -92,15 +92,9 @@ const Dashboard = () => {
                 ))}
             </div>
 
-<<<<<<< HEAD
             <div className="flex flex-col xl:flex-row flex-1 gap-6 xl:h-[calc(100vh-120px)]">
                 {/* Map Center */}
                 <div className="flex-1 relative h-[50vh] sm:h-[60vh] xl:h-full">
-=======
-            <div className="flex flex-1 gap-6 h-[calc(100vh-120px)]">
-                {/* Map Center */}
-                <div className="flex-1 relative h-full">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     {loading ? (
                         <div className="w-full h-full min-h-[500px] flex flex-col items-center justify-center bg-white/5 rounded-[40px] border border-white/10 backdrop-blur-sm">
                             <Activity className="w-12 h-12 text-accent-gold animate-pulse mb-4" />
@@ -118,11 +112,7 @@ const Dashboard = () => {
                             </button>
                         </div>
                     ) : (
-<<<<<<< HEAD
                         <div className="w-full h-full rounded-2xl sm:rounded-[40px] overflow-hidden border border-white/10">
-=======
-                        <div className="w-full h-full rounded-[40px] overflow-hidden border border-white/10">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                             <StationMap stations={stations} />
                         </div>
                     )}
@@ -138,11 +128,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Right Sidebar List / Mini Analytics */}
-<<<<<<< HEAD
                 <div className="w-full xl:w-80 flex flex-col space-y-6">
-=======
-                <div className="w-80 hidden xl:flex flex-col space-y-6">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     <GlassCard className="flex-1 overflow-hidden flex flex-col p-6 rounded-[32px]">
                         <h4 className="text-white font-black uppercase tracking-[0.2em] text-[10px] mb-6 flex items-center opacity-50">
                             <Activity className="w-3 h-3 mr-2 text-accent-gold" />

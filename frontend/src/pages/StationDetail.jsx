@@ -155,11 +155,7 @@ const StationDetail = () => {
                                 <div>
                                     <p className="text-[10px] text-white/60 uppercase font-black tracking-widest">Last Update</p>
                                     <p className="text-white text-sm mt-0.5 font-medium">
-<<<<<<< HEAD
                                         {new Date(station.last_transmission).toLocaleString([], { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })} (System Time)
-=======
-                                        {new Date(station.last_transmission).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (System Time)
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                                     </p>
                                     <div className="flex items-center mt-2">
                                         <span className="w-2 h-2 bg-safe rounded-full mr-2 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse"></span>
@@ -203,31 +199,18 @@ const StationDetail = () => {
 
                 {/* Right Column: Readings & Charts */}
                 <div className="lg:col-span-2 space-y-6">
-<<<<<<< HEAD
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-=======
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                         {readingParams.map((param, idx) => (
                             <ReadingCard key={idx} {...param} />
                         ))}
                     </div>
 
-<<<<<<< HEAD
                     <GlassCard className="p-4 sm:p-6 lg:p-10 border-white/5 min-h-[400px] sm:min-h-[500px] relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none"></div>
                         
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-10 border-b border-white/5 pb-4 sm:pb-6 gap-4">
                             <div>
                                 <h4 className="text-lg sm:text-2xl font-black text-white uppercase italic tracking-tighter">Scientific <span className="text-accent-gold">Trend Analysis</span></h4>
-=======
-                    <GlassCard className="p-10 border-white/5 min-h-[500px] relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none"></div>
-                        
-                        <div className="flex items-center justify-between mb-10 border-b border-white/5 pb-6">
-                            <div>
-                                <h4 className="text-2xl font-black text-white uppercase italic tracking-tighter">Scientific <span className="text-accent-gold">Trend Analysis</span></h4>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                                 <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mt-1">Advanced multi-parameter telemetry link</p>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -244,11 +227,7 @@ const StationDetail = () => {
                         </div>
 
                         {readings.length > 0 ? (
-<<<<<<< HEAD
                             <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-8 gap-y-10 sm:gap-x-12 sm:gap-y-16">
-=======
-                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-12 gap-y-16">
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                                 <TrendChart data={readings} dataKey="pH" title="pH Level Variance" color="#10b981" externalTimeRange={timeFilter} />
                                 <TrendChart data={readings} dataKey="turbidity" title="Turbidity Fluctuation" color="#f59e0b" externalTimeRange={timeFilter} />
                                 <TrendChart data={readings} dataKey="dissolvedOxygen" title="Dissolved Oxygen (DO)" color="#3b82f6" externalTimeRange={timeFilter} />
@@ -258,11 +237,7 @@ const StationDetail = () => {
                             <div className="flex flex-col items-center justify-center py-20 opacity-30 text-center">
                                 <Activity className="w-24 h-24 mb-6 text-accent-gold animate-pulse" />
                                 <h5 className="text-xl font-black uppercase italic tracking-tighter">No Active Telemetry</h5>
-<<<<<<< HEAD
                                 <p className="text-sm font-medium text-white/60">No telemetry data received for this station in the last 24 hours.</p>
-=======
-                                <p className="text-sm font-medium text-white/60">Waiting for secure data transmission from the sensor fleet.</p>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                             </div>
                         )}
                     </GlassCard>

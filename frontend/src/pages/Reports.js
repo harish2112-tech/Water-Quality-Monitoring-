@@ -24,12 +24,9 @@ const Reports = () => {
     const [showForm, setShowForm] = useState(false);
     const [selectedReport, setSelectedReport] = useState(null);
     const [menuOpenId, setMenuOpenId] = useState(null);
-<<<<<<< HEAD
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("ALL");
     const [showFilterDropdown, setShowFilterDropdown] = useState(false);
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
     // Function to load reports
     const loadReports = async () => {
@@ -72,7 +69,6 @@ const Reports = () => {
         setMenuOpenId(null);
     };
 
-<<<<<<< HEAD
     const filteredReports = reports.filter((r) => {
         const matchesSearch = (r.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
                               (r.description || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -81,8 +77,6 @@ const Reports = () => {
         return matchesSearch && matchesStatus;
     });
 
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     useEffect(() => {
         loadReports();
     }, []);
@@ -118,17 +112,13 @@ const Reports = () => {
                         <input
                             type="text"
                             placeholder="Filter registry..."
-<<<<<<< HEAD
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                             className="bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-accent-gold/50 transition-all w-48 md:w-64"
                         />
 
                     </div>
 
-<<<<<<< HEAD
                     <div className="relative">
                         <button 
                             onClick={() => setShowFilterDropdown(!showFilterDropdown)}
@@ -164,11 +154,6 @@ const Reports = () => {
                             </div>
                         )}
                     </div>
-=======
-                    <button className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-primary-gray hover:text-white transition-colors">
-                        <Filter className="w-5 h-5" />
-                    </button>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
                 </div>
 
@@ -190,13 +175,6 @@ const Reports = () => {
                                 <th className="px-6 py-4 text-[10px] uppercase font-black text-primary-gray tracking-[0.2em]">
                                     Subject
                                 </th>
-<<<<<<< HEAD
-=======
-{/* 
-                                <th className="px-6 py-4 text-[10px] uppercase font-black text-primary-gray tracking-[0.2em]">
-                                    Station Context
-                                </th> */}
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
                                 <th className="px-6 py-4 text-[10px] uppercase font-black text-primary-gray tracking-[0.2em]">
                                     Timestamp
@@ -223,7 +201,6 @@ const Reports = () => {
                                     </td>
                                 </tr>
 
-<<<<<<< HEAD
                             ) : reports.length === 0 ? (
                                 <tr>
                                     <td colSpan="6" className="text-center py-12 text-primary-gray text-xs font-bold uppercase tracking-widest italic opacity-50">
@@ -239,11 +216,6 @@ const Reports = () => {
                             ) : (
 
                                 filteredReports.map((report) => (
-=======
-                            ) : (
-
-                                reports.map((report) => (
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
                                     <tr key={report.id} className="hover:bg-white/5 transition-colors group">
 

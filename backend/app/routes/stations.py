@@ -32,7 +32,6 @@ def list_stations(
     """List all water monitoring stations."""
     return station_service.get_all_stations(db, skip=skip, limit=limit)
 
-<<<<<<< HEAD
 from app.schemas.reading import ReadingResponse, AggregateReadingResponse
 
 @router.get("/readings/aggregate", response_model=List[AggregateReadingResponse])
@@ -44,8 +43,6 @@ def get_station_readings_aggregate(
 ):
     """Get hourly averaged water quality readings for a specific station."""
     return station_service.get_aggregated_readings(db, station_id=station_id, period_hours=period)
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 @router.get("/{station_id}", response_model=StationResponse)
 def get_station(
@@ -59,10 +56,6 @@ def get_station(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Station not found")
     return station
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 @router.post("", response_model=StationResponse, status_code=status.HTTP_201_CREATED)
 def create_station(
     data: StationCreate,
@@ -72,10 +65,6 @@ def create_station(
     """Create a new water monitoring station (admin/authority only)."""
     return station_service.create_station(db, data)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 @router.put("/{station_id}", response_model=StationResponse)
 def update_station(
     station_id: int,
@@ -89,10 +78,6 @@ def update_station(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Station not found")
     return station
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 @router.delete("/{station_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_station(
     station_id: int,
@@ -104,18 +89,3 @@ def delete_station(
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Station not found")
     return None
-<<<<<<< HEAD
-=======
-
-from app.schemas.reading import ReadingResponse, AggregateReadingResponse
-
-@router.get("/readings/aggregate", response_model=List[AggregateReadingResponse])
-def get_station_readings_aggregate(
-    station_id: int,
-    period: Optional[int] = 24,
-    db: Session = Depends(get_db),
-    _=Depends(get_current_user),
-):
-    """Get hourly averaged water quality readings for a specific station."""
-    return station_service.get_aggregated_readings(db, station_id=station_id, period_hours=period)
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29

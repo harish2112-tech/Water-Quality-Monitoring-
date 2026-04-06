@@ -5,7 +5,6 @@ from app.models.station import WaterStation
 from app.schemas.collaboration import CollaborationCreate, CollaborationUpdate
 from fastapi import HTTPException, status
 
-<<<<<<< HEAD
 def get_collaborations(db: Session, ngo_user_id: int, status: Optional[str] = None, search: Optional[str] = None, skip: int = 0, limit: int = 100) -> List[Collaboration]:
     """Get collaborations for a specific NGO user with optional status and search filter."""
     query = db.query(Collaboration).filter(Collaboration.ngo_user_id == ngo_user_id)
@@ -29,14 +28,6 @@ def get_collaborations(db: Session, ngo_user_id: int, status: Optional[str] = No
                 collab.latitude = station.latitude
                 collab.longitude = station.longitude
     return results
-=======
-def get_collaborations(db: Session, ngo_user_id: int, status: Optional[str] = None, skip: int = 0, limit: int = 100) -> List[Collaboration]:
-    """Get collaborations for a specific NGO user with optional status filter."""
-    query = db.query(Collaboration).filter(Collaboration.ngo_user_id == ngo_user_id)
-    if status:
-        query = query.filter(Collaboration.status == status)
-    return query.order_by(Collaboration.created_at.desc()).offset(skip).limit(limit).all()
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 def get_collaboration_by_id(db: Session, collaboration_id: int, ngo_user_id: int) -> Optional[Collaboration]:
     """Get a specific collaboration by ID, ensuring ownership."""

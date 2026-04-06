@@ -25,13 +25,10 @@ const ReadingCard = ({ label, value, unit, icon: Icon }) => {
 
     const status = getStatus(value, label);
 
-<<<<<<< HEAD
     const displayValue = (value !== undefined && value !== null && !isNaN(Number(value)))
         ? Number(value).toFixed(2)
         : (value ?? "--");
 
-=======
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     return (
         <GlassCard className="p-4 flex flex-col justify-between hover:border-accent-gold/30 transition-all border-white/5">
             <div className="flex justify-between items-start mb-4">
@@ -41,11 +38,7 @@ const ReadingCard = ({ label, value, unit, icon: Icon }) => {
             <div className="flex items-center space-x-3">
                 {Icon && <Icon className="w-5 h-5 text-accent-gold" />}
                 <div className="flex items-baseline space-x-1">
-<<<<<<< HEAD
                     <span className="text-2xl font-black text-white">{displayValue}</span>
-=======
-                    <span className="text-2xl font-black text-white">{value ?? "--"}</span>
->>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     <span className="text-xs text-white/60 font-bold">{unit}</span>
                 </div>
             </div>
