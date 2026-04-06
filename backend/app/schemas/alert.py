@@ -22,8 +22,11 @@ class AlertBase(BaseModel):
     location: str
     station_id: Optional[int] = None
     status: str = "Active"
+<<<<<<< HEAD
     parameter: Optional[str] = None
     source: Optional[str] = None
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 
 class AlertCreate(AlertBase):

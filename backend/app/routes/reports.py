@@ -14,12 +14,19 @@ router = APIRouter(prefix="/api/reports", tags=["Water Reports"])
 def list_reports(
     skip: int = 0,
     limit: int = 200,
+<<<<<<< HEAD
     station_id: int = None,
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
     """List citizen water quality reports (filtered by role)."""
+<<<<<<< HEAD
     return report_service.get_reports(db, user=current_user, station_id=station_id, skip=skip, limit=limit)
+=======
+    return report_service.get_reports(db, user=current_user, skip=skip, limit=limit)
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 
 @router.post("", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)

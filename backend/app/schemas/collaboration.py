@@ -22,8 +22,11 @@ class CollaborationResponse(CollaborationBase):
     ngo_user_id: int
     status: str
     created_at: datetime
+<<<<<<< HEAD
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
     class Config:
         from_attributes = True

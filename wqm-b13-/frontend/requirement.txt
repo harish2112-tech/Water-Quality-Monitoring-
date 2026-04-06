@@ -1,0 +1,3 @@
+npm install three @react-three/fiber @react-three/drei lucide-react framer-motion clsx tailwind-merge axios react-router-dom
+npm install -D tailwindcss postcss autoprefixer @tailwindcss/postcss
+npm install leaflet react-leaflet recharts

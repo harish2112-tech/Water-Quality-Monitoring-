@@ -22,8 +22,11 @@ const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+<<<<<<< HEAD
     const [roleFilter, setRoleFilter] = useState('all');
     const [showFilters, setShowFilters] = useState(false);
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     const [editingUser, setEditingUser] = useState(null);
     const [editForm, setEditForm] = useState({ role: '' });
 
@@ -65,12 +68,19 @@ const UserManagement = () => {
         }
     };
 
+<<<<<<< HEAD
     const filteredUsers = users.filter(u => {
         const matchesSearch = u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                               u.email.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesRole = roleFilter === 'all' || (u.role && u.role.toLowerCase() === roleFilter.toLowerCase());
         return matchesSearch && matchesRole;
     });
+=======
+    const filteredUsers = users.filter(u => 
+        u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        u.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-[60vh] text-white">
@@ -83,7 +93,11 @@ const UserManagement = () => {
         <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-700">
             {/* Header */}
             <div>
+<<<<<<< HEAD
                 <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tighter italic">
+=======
+                <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic">
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     Personnel <span className="text-accent-gold">Registry</span>
                 </h2>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
@@ -99,6 +113,7 @@ const UserManagement = () => {
                                 placeholder="Locate operative..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
+<<<<<<< HEAD
                                 className="bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-accent-gold/50 transition-all w-full md:w-64"
                             />
                         </div>
@@ -137,12 +152,24 @@ const UserManagement = () => {
                                 </div>
                             )}
                         </div>
+=======
+                                className="bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-accent-gold/50 transition-all w-64"
+                            />
+                        </div>
+                        <button className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-primary-gray hover:text-white transition-colors">
+                            <Filter className="w-4 h-4" />
+                        </button>
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     </div>
                 </div>
             </div>
 
             {/* Quick Stats */}
+<<<<<<< HEAD
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+=======
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 {[
                     { label: 'Total Operatives', val: users.length, icon: Users, color: 'accent-gold' },
                     { label: 'Administrators', val: users.filter(u => u.role === 'admin').length, icon: Shield, color: 'critical' },

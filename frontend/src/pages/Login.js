@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MainBackground } from '../components/Background/MainBackground';
 import { GlassCard } from '../components/ui/GlassCard';
+<<<<<<< HEAD
 import { Shield, Lock, User, ArrowRight, AlertCircle, Loader, Eye, EyeOff } from 'lucide-react';
+=======
+import { Shield, Lock, User, ArrowRight, AlertCircle, Loader } from 'lucide-react';
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+<<<<<<< HEAD
   const [showPassword, setShowPassword] = useState(false);
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -112,6 +119,7 @@ const Login = () => {
                 <div className="relative group">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-ocean-light/30 group-focus-within:text-accent-gold transition-colors duration-300" />
                   <input
+<<<<<<< HEAD
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={password}
@@ -127,6 +135,16 @@ const Login = () => {
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
+=======
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-[18px] py-4 pl-12 pr-4 text-white placeholder:text-white/20 focus:outline-none focus:border-accent-gold/40 focus:ring-1 focus:ring-accent-gold/20 transition-all duration-500"
+                    required
+                    disabled={loading}
+                  />
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 </div>
 
               </div>

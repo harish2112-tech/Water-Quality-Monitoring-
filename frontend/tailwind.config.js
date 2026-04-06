@@ -6,7 +6,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+<<<<<<< HEAD
         "background": "#061A2D",
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
         "ocean-deep": "#061A2D",
         "ocean-light": "#0A2540",
         "ocean-glow": "#4ECDC4",

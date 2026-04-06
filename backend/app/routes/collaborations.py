@@ -11,13 +11,20 @@ from app.models.user import User
 router = APIRouter(
     prefix="/api/v1/collaborations",
     tags=["NGO Collaborations"],
+<<<<<<< HEAD
     dependencies=[Depends(require_role("ngo", "admin"))]
+=======
+    dependencies=[Depends(require_role("ngo"))]
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 )
 
 @router.get("", response_model=List[CollaborationResponse])
 def list_collaborations(
     status: Optional[str] = None,
+<<<<<<< HEAD
     search: Optional[str] = None,
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     page: int = 1,
     limit: int = 10,
     db: Session = Depends(get_db),
@@ -25,7 +32,11 @@ def list_collaborations(
 ):
     """List all NGO collaboration projects for the authenticated NGO."""
     skip = (page - 1) * limit
+<<<<<<< HEAD
     return collaboration_service.get_collaborations(db, ngo_user_id=current_user.id, status=status, search=search, skip=skip, limit=limit)
+=======
+    return collaboration_service.get_collaborations(db, ngo_user_id=current_user.id, status=status, skip=skip, limit=limit)
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 
 @router.post("", response_model=CollaborationResponse, status_code=status.HTTP_201_CREATED)
 def create_collaboration(

@@ -19,8 +19,12 @@ import {
     CartesianGrid, 
     Tooltip, 
     ResponsiveContainer,
+<<<<<<< HEAD
     ReferenceLine,
     Legend
+=======
+    ReferenceLine
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
 } from 'recharts';
 import api from '../services/api';
 import GlassCard from '../components/GlassCard';
@@ -33,6 +37,7 @@ const AuthorityDashboard = () => {
     const [alerts, setAlerts] = useState([]);
     const [chartData, setChartData] = useState([]);
     
+<<<<<<< HEAD
     // Line Visibility Filter
     const [visibleLines, setVisibleLines] = useState(["pH", "turbidity", "dissolvedOxygen", "lead", "arsenic"]);
     
@@ -50,6 +55,8 @@ const AuthorityDashboard = () => {
         );
     };
     
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     // Admin Only - User Management
     const [usersList, setUsersList] = useState([]);
     const [userSearch, setUserSearch] = useState('');
@@ -184,7 +191,11 @@ const AuthorityDashboard = () => {
         <div className="space-y-8 animate-in fade-in pb-20">
             {/* Header Text */}
             <div className="mb-10">
+<<<<<<< HEAD
                 <h1 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tighter italic">
+=======
+                <h1 className="text-4xl font-black text-white uppercase tracking-tighter italic">
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     Command <span className="text-accent-gold">Dashboard</span>
                 </h1>
                 <p className="text-primary-gray mt-1 text-sm font-medium tracking-wide">
@@ -193,7 +204,11 @@ const AuthorityDashboard = () => {
             </div>
 
             {/* KPI Metric Cards */}
+<<<<<<< HEAD
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+=======
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                 {[ 
                     { title: "Pending Queue", value: kpis.pending, icon: ShieldCheck, color: "text-blue-500", bg: "bg-blue-500/10" },
                     { title: "Active Alerts", value: kpis.activeAlerts, icon: AlertTriangle, color: "text-red-500", bg: "bg-red-500/10" },
@@ -221,6 +236,7 @@ const AuthorityDashboard = () => {
                         <h2 className="text-xl font-black uppercase tracking-widest text-white italic truncate">
                             30-Day Subsystem <span className="text-accent-gold">Aggregates</span>
                         </h2>
+<<<<<<< HEAD
                         
                         {/* Line Filters */}
                         <div className="flex flex-wrap gap-2">
@@ -239,12 +255,15 @@ const AuthorityDashboard = () => {
                                 </button>
                             ))}
                         </div>
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                     </div>
                     <div className="h-96">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
                                 <XAxis dataKey="day" stroke="#666" fontSize={10} tickMargin={10} />
+<<<<<<< HEAD
                                 <YAxis yAxisId="left" stroke="#10b981" fontSize={10} domain={[4, 10]} hide={!visibleLines.includes('pH') && !visibleLines.includes('dissolvedOxygen')} />
                                 <YAxis yAxisId="right" orientation="right" stroke="#f59e0b" fontSize={10} hide={!visibleLines.includes('turbidity')} />
                                 <YAxis yAxisId="trace" orientation="right" stroke="#8b5cf6" fontSize={10} hide={!visibleLines.includes('lead') && !visibleLines.includes('arsenic')} />
@@ -284,6 +303,23 @@ const AuthorityDashboard = () => {
                                     height={36} 
                                     wrapperStyle={{ fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold', paddingTop: '10px' }}
                                 />
+=======
+                                <YAxis yAxisId="left" stroke="#10b981" fontSize={10} domain={[4, 10]} />
+                                <YAxis yAxisId="right" orientation="right" stroke="#f59e0b" fontSize={10} />
+                                <YAxis yAxisId="trace" orientation="right" stroke="#8b5cf6" fontSize={10} hide />
+                                <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#333' }} />
+                                {/* WHO Reference Baselines */}
+                                <ReferenceLine y={8.5} yAxisId="left" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: 'WHO Max pH', fill: 'red', fontSize: 9 }} />
+                                <ReferenceLine y={6.5} yAxisId="left" stroke="red" strokeDasharray="3 3" label={{ position: 'insideBottomLeft', value: 'WHO Min pH', fill: 'red', fontSize: 9 }} />
+                                <ReferenceLine y={4} yAxisId="right" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopRight', value: 'WHO Max Turbidity', fill: 'red', fontSize: 9 }} />
+                                <ReferenceLine y={0.01} yAxisId="trace" stroke="red" strokeDasharray="3 3" label={{ position: 'insideTopRight', value: 'WHO Max Arsenic', fill: 'red', fontSize: 7 }} />
+                                
+                                <Line yAxisId="left" type="monotone" dataKey="pH" stroke="#10b981" strokeWidth={3} dot={false} />
+                                <Line yAxisId="right" type="monotone" dataKey="turbidity" stroke="#f59e0b" strokeWidth={3} dot={false} />
+                                <Line yAxisId="left" type="monotone" dataKey="dissolvedOxygen" stroke="#3b82f6" strokeWidth={2} dot={false} strokeDasharray="5 5" />
+                                <Line yAxisId="trace" type="monotone" dataKey="lead" stroke="#8b5cf6" strokeWidth={2} dot={false} />
+                                <Line yAxisId="trace" type="monotone" dataKey="arsenic" stroke="#ec4899" strokeWidth={2} dot={false} />
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
@@ -393,7 +429,11 @@ const AuthorityDashboard = () => {
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-primary-gray mb-1">Alert Title</label>
                                 <input required type="text" value={newAlertData.title} onChange={e => setNewAlertData({...newAlertData, title: e.target.value})} className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-red-500/50 outline-none transition-all" placeholder="e.g. Critical pH Variance" />
                             </div>
+<<<<<<< HEAD
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+=======
+                            <div className="grid grid-cols-2 gap-4">
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
                                 <div>
                                     <label className="block text-[10px] font-black uppercase tracking-widest text-primary-gray mb-1">Type</label>
                                     <select value={newAlertData.type} onChange={e => setNewAlertData({...newAlertData, type: e.target.value})} className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none cursor-pointer">

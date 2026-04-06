@@ -24,6 +24,7 @@ export const alertService = {
     acknowledge: async (id) => {
         const response = await api.put(`/api/alerts/${id}/acknowledge`);
         return response.data;
+<<<<<<< HEAD
     },
 
     getPredictive: async (location = "") => {
@@ -34,5 +35,7 @@ export const alertService = {
     generatePredictive: async () => {
         const response = await api.post('/api/v1/alerts/predictive/generate');
         return response.data;
+=======
+>>>>>>> 9f82e7e5f8c36504b270f509af7d2ffeea6ddc29
     }
 };
