@@ -6,7 +6,6 @@ import { collaborationService } from '../../services/collaborationService';
 const ReportPanel = ({ reports: initialReports, isOpen, onClose, stationName, stationId, initialCoords }) => {
     const [showForm, setShowForm] = React.useState(false);
     const [reports, setReports] = React.useState(initialReports);
-    const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
         setReports(initialReports);
@@ -14,14 +13,11 @@ const ReportPanel = ({ reports: initialReports, isOpen, onClose, stationName, st
 
     const refreshReports = async () => {
         if (!stationId) return;
-        setLoading(true);
         try {
             const updated = await collaborationService.getReportsByStation(stationId);
             setReports(updated);
         } catch (err) {
             console.error("Failed to refresh reports:", err);
-        } finally {
-            setLoading(false);
         }
     };
 

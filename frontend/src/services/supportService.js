@@ -1,4 +1,3 @@
-import api from "./api";
 
 const supportService = {
   submitContactForm: async (formData) => {
