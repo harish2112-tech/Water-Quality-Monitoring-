@@ -155,7 +155,7 @@ const StationDetail = () => {
                                 <div>
                                     <p className="text-[10px] text-white/60 uppercase font-black tracking-widest">Last Update</p>
                                     <p className="text-white text-sm mt-0.5 font-medium">
-                                        {new Date(station.last_transmission).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (System Time)
+                                        {new Date(station.last_transmission).toLocaleString([], { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })} (System Time)
                                     </p>
                                     <div className="flex items-center mt-2">
                                         <span className="w-2 h-2 bg-safe rounded-full mr-2 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse"></span>
@@ -237,7 +237,7 @@ const StationDetail = () => {
                             <div className="flex flex-col items-center justify-center py-20 opacity-30 text-center">
                                 <Activity className="w-24 h-24 mb-6 text-accent-gold animate-pulse" />
                                 <h5 className="text-xl font-black uppercase italic tracking-tighter">No Active Telemetry</h5>
-                                <p className="text-sm font-medium text-white/60">Waiting for secure data transmission from the sensor fleet.</p>
+                                <p className="text-sm font-medium text-white/60">No telemetry data received for this station in the last 24 hours.</p>
                             </div>
                         )}
                     </GlassCard>
