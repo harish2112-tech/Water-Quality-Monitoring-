@@ -31,9 +31,9 @@ const Dashboard = () => {
             try {
                 // In a real scenario, these would be customized for the NGO's scope
                 const [collabs, reports, alerts] = await Promise.all([
-                    api.get(`/api/v1/collaborations?status=${statusFilter === 'all' ? '' : statusFilter}`),
-                    api.get('/api/v1/reports'), // area filter can be added when scope is defined
-                    api.get('/api/v1/alerts')   // location filter can be added
+                    api.get(`/collaborations?status=${statusFilter === 'all' ? '' : statusFilter}`),
+                    api.get('/reports'), // area filter can be added when scope is defined
+                    api.get('/alerts')   // location filter can be added
                 ]);
 
                 setStats({

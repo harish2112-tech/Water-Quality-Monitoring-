@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     const restoreUser = async () => {
       if (!token) { setLoading(false); return; }
       try {
-        const { data } = await api.get('/api/auth/me');
+        const { data } = await api.get('/auth/me');
         setUser(data);
       } catch {
         setToken(null);
@@ -37,14 +37,14 @@ export const AuthProvider = ({ children }) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const login = useCallback(async (email, password) => {
-    const { data } = await api.post('/api/auth/login', { email, password });
+    const { data } = await api.post('/auth/login', { email, password });
     setToken(data.access_token);
     setUser(data.user);
     return data.user;
   }, []);
 
   const register = useCallback(async (formData) => {
-    const { data } = await api.post('/api/auth/register', formData);
+    const { data } = await api.post('/auth/register', formData);
     return data;
   }, []);
 

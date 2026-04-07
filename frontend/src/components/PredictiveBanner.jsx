@@ -15,7 +15,7 @@ const PredictiveBanner = () => {
 
         const fetchPrediction = async () => {
             try {
-                const response = await api.get('/api/alerts/predictive');
+                const response = await api.get('/alerts/predictive');
                 if (response.data) {
                     setPrediction(response.data);
                     setIsVisible(true);

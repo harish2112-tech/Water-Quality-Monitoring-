@@ -73,7 +73,7 @@ const AuthorityDashboard = () => {
     // 1. Report Moderation Queue (fetch /api/reports?status=pending / failing back to local filter)
     const fetchReports = async () => {
         try {
-            const { data } = await api.get('/api/reports');
+            const { data } = await api.get('/reports');
             // Safely fail-soft filter if backend endpoint doesn't support query-params natively
             const pending = data.filter(r => (r.status || '').toUpperCase() === 'PENDING');
             setPendingReports(pending);
@@ -85,7 +85,7 @@ const AuthorityDashboard = () => {
 
     const handleModerateReport = async (id, status) => {
         try {
-            await api.patch(`/api/reports/${id}/status`, { status });
+            await api.patch(`/reports/${id}/status`, { status });
             // Immediate UI flush (Optimistic Updates)
             setPendingReports(prev => prev.filter(r => r.id !== id));
             if (status === 'VERIFIED') setKpis(prev => ({ ...prev, verifiedReports: prev.verifiedReports + 1, pending: prev.pending - 1 }));
@@ -98,7 +98,7 @@ const AuthorityDashboard = () => {
     // 2. Alert Management (/api/alerts)
     const fetchAlerts = async () => {
         try {
-            const { data } = await api.get('/api/alerts');
+            const { data } = await api.get('/alerts');
             setAlerts(data);
             setKpis(prev => ({ ...prev, activeAlerts: data.length }));
         } catch (error) {
@@ -108,7 +108,7 @@ const AuthorityDashboard = () => {
 
     const handleResolveAlert = async (id) => {
         try {
-            await api.put(`/api/alerts/${id}/acknowledge`);
+            await api.put(`/alerts/${id}/acknowledge`);
             setAlerts(prev => prev.filter(a => a.id !== id));
             setKpis(prev => ({ ...prev, activeAlerts: prev.activeAlerts - 1 }));
         } catch (error) {
@@ -120,7 +120,7 @@ const AuthorityDashboard = () => {
         e.preventDefault();
         try {
             setIsSubmittingAlert(true);
-            const { data } = await api.post('/api/alerts', newAlertData);
+            const { data } = await api.post('/alerts', newAlertData);
             setAlerts(prev => [data, ...prev]);
             setKpis(prev => ({ ...prev, activeAlerts: prev.activeAlerts + 1 }));
             setIsAlertModalOpen(false);
@@ -136,7 +136,7 @@ const AuthorityDashboard = () => {
     // 3. Water Quality Aggregate Graphing (/api/stations/readings/aggregate?days=30)
     const fetchAggregateData = async () => {
         try {
-            const { data } = await api.get('/api/stations/readings/aggregate', { params: { days: 30 } });
+            const { data } = await api.get('/stations/readings/aggregate', { params: { days: 30 } });
             setChartData(data);
             // Dynamic exceedances calculation can happen iteratively
             setKpis(prev => ({ ...prev, exceedances: data.filter(d => d.turbidity > 4 || d.pH < 6.5 || d.pH > 8.5).length }));
@@ -158,7 +158,7 @@ const AuthorityDashboard = () => {
     // 4. User Management Control Panel (/api/users - Admin only)
     const fetchUsers = async () => {
         try {
-            const { data } = await api.get('/api/users');
+            const { data } = await api.get('/users');
             setUsersList(data);
         } catch (error) {
             console.warn('User endpoints missing, simulating fallback state.');
@@ -174,7 +174,7 @@ const AuthorityDashboard = () => {
         try {
             // Optimistic update
             setUsersList(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
-            await api.patch(`/api/users/${userId}/role`, { role: newRole });
+            await api.patch(`/users/${userId}/role`, { role: newRole });
         } catch (err) {
             console.error("Failed role change via PATCH:", err);
         }

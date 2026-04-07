@@ -28,7 +28,7 @@ const SubmitCollaborationForm = ({ onSuccess, initialData = null, isEdit = false
     useEffect(() => {
         const fetchStations = async () => {
             try {
-                const response = await api.get('/api/stations');
+                const response = await api.get('/stations');
                 setStations(response.data || []);
             } catch (err) {
                 console.error("Failed to fetch stations for dropdown:", err);
