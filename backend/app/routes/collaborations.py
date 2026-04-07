@@ -9,7 +9,7 @@ from app.dependencies.role_guard import require_role
 from app.models.user import User
 
 router = APIRouter(
-    prefix="/api/v1/collaborations",
+    prefix="/collaborations",
     tags=["NGO Collaborations"],
     dependencies=[Depends(require_role("ngo", "admin"))]
 )

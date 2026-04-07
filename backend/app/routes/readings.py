@@ -9,7 +9,7 @@ from app.services.auth import get_current_user
 
 from app.schemas.reading import ReadingResponse, PivotedReadingResponse
 
-router = APIRouter(prefix="/api/readings", tags=["Sensor Readings"])
+router = APIRouter(prefix="/readings", tags=["Sensor Readings"])
 
 
 @router.get("", response_model=List[ReadingResponse])

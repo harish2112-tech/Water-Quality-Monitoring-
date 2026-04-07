@@ -7,7 +7,7 @@ from app.schemas.report import ReportCreate, ReportResponse, ReportStatusUpdate
 from app.services import report_service
 from app.services.auth import get_current_user
 
-router = APIRouter(prefix="/api/reports", tags=["Water Reports"])
+router = APIRouter(prefix="/reports", tags=["Water Reports"])
 
 
 @router.get("", response_model=List[ReportResponse])

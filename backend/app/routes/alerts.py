@@ -7,7 +7,7 @@ from app.schemas.alert import AlertCreate, AlertResponse
 from app.services import alert_service
 from app.services.auth import get_current_user
 
-router = APIRouter(prefix="/api/alerts", tags=["Water Alerts"])
+router = APIRouter(prefix="/alerts", tags=["Water Alerts"])
 
 
 @router.get("", response_model=List[AlertResponse])

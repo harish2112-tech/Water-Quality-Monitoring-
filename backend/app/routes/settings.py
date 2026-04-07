@@ -8,7 +8,7 @@ from app.schemas.settings import ThresholdBase, ThresholdResponse, UserPreferenc
 from app.services.auth import get_current_user
 from app.dependencies.role_guard import require_role
 
-router = APIRouter(prefix="/api/v1/settings", tags=["settings"])
+router = APIRouter(prefix="/settings", tags=["settings"])
 
 # --- System Thresholds (Admin Only to Update) ---
 

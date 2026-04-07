@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-router = APIRouter(prefix="/api/v1/support", tags=["support"])
+router = APIRouter(prefix="/support", tags=["support"])
 
 class ContactForm(BaseModel):
     name: str

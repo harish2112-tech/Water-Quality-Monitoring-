@@ -54,26 +54,30 @@ def startup():
     Base.metadata.create_all(bind=engine)
 
 # ---------- Routers ----------
-app.include_router(auth_router)
-app.include_router(user_router)
-app.include_router(user_router, prefix="/api")
-app.include_router(stations_router)
-app.include_router(stations_router, prefix="/api")
-app.include_router(reports_router)
-app.include_router(readings_router)
-app.include_router(alerts_router)
-app.include_router(collaborations_router, dependencies=[Depends(require_role("ngo", "admin"))])
-app.include_router(support_router)
-app.include_router(settings_router)
+# Standard prefixes for Vercel (/api) and local/standard paths
+for prefix in ["/api", ""]:
+    app.include_router(auth_router, prefix=prefix)
+    app.include_router(user_router, prefix=prefix)
+    app.include_router(stations_router, prefix=prefix)
+    app.include_router(reports_router, prefix=prefix)
+    app.include_router(readings_router, prefix=prefix)
+    app.include_router(alerts_router, prefix=prefix)
+    app.include_router(collaborations_router, prefix=prefix)
+    app.include_router(support_router, prefix=prefix)
+    app.include_router(settings_router, prefix=prefix)
 
-# Versioned API support
-app.include_router(reports_router, prefix="/v1")
-app.include_router(alerts_router, prefix="/v1")
-app.include_router(stations_router, prefix="/v1")
+# Versioned API support (/v1 and /api/v1)
+for v_prefix in ["/v1", "/api/v1"]:
+    app.include_router(stations_router, prefix=v_prefix)
+    app.include_router(reports_router, prefix=v_prefix)
+    app.include_router(readings_router, prefix=v_prefix)
+    app.include_router(alerts_router, prefix=v_prefix)
+    app.include_router(readings.router, prefix=v_prefix) # Predictive readings
+    app.include_router(websocket.router, prefix=v_prefix)
 
+# Predictive alerts specific path
 app.include_router(alerts.router, prefix="/api/v1/alerts")
-app.include_router(readings.router, prefix="/api/v1")
-app.include_router(websocket.router, prefix="/api/v1")
+app.include_router(alerts.router, prefix="/v1/alerts")
 
 # ---------- Health ----------
 @app.get("/")
