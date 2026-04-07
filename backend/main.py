@@ -3,6 +3,11 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import traceback
+import os
+import sys
+
+# Add the current directory to the search path for Vercel
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from app.core.database import engine, Base
 from app.routes import (
