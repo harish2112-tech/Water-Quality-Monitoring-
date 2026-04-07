@@ -9,7 +9,7 @@ import sys
 # Add the current directory to the search path for Vercel
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from app.core.database import engine, Base
+from app.core.database import engine, Base, get_db
 from app.routes import (
     auth_router,
     user_router,
@@ -23,6 +23,7 @@ from app.routes import (
 )
 from app.dependencies.role_guard import require_role
 from app.api import alerts, readings, websocket
+from sqlalchemy import text
 
 
 # Import all models so SQLAlchemy will create the tables
@@ -82,6 +83,23 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+@app.get("/api/health-db")
+async def health_db_check(db = Depends(get_db)):
+    try:
+        # Perform a simple query to test connectivity
+        db.execute(text("SELECT 1"))
+        return {
+            "status": "connected",
+            "database": "Neon/PostgreSQL",
+            "message": "Database connectivity verified successfully"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "detail": str(e),
+            "message": "Database connectivity failed"
+        }
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
